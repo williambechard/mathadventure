@@ -3,6 +3,7 @@ import { StyleSheet, View, Text } from "react-native";
 import { StartButton } from "../StartButton/StartButton";
 import NumberTile from "../NumberTile/NumberTile";
 import { Banner } from "../Banner/Banner";
+import { Audio } from "expo-av";
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -46,9 +47,62 @@ const ChallengeCard = ({
   selectedNumbers,
   response,
   setIsCorrect,
+  setDuration,
 }) => {
+  const [soundCorrect, setSoundCorrect] = useState();
+  const [soundWrong, setSoundWrong] = useState();
+
   const num1Ref = useRef();
   const num2Ref = useRef();
+  useEffect(() => {
+    const loadSound = async () => {
+      try {
+        const { sound } = await Audio.Sound.createAsync(
+          require("../../../assets/sound/correct.mp3"),
+        );
+        setSoundCorrect(sound);
+        const { sound: sound2 } = await Audio.Sound.createAsync(
+          require("../../../assets/sound/incorrect.mp3"),
+        );
+        setSoundWrong(sound2);
+      } catch (err) {
+        console.log("error loading sound", err);
+      }
+    };
+
+    loadSound(); // Load sound when component mounts
+
+    return () => {
+      // Cleanup: unload the sound when the component unmounts
+      if (soundCorrect) {
+        soundCorrect.unloadAsync();
+      }
+      if (soundWrong) {
+        soundWrong.unloadAsync();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    switch (gameState) {
+      case 4:
+        playSound();
+        break;
+    }
+  }, [gameState]);
+
+  const playSound = async () => {
+    const soundToPlay =
+      response === selectedNumbers[0] * selectedNumbers[1]
+        ? soundCorrect
+        : soundWrong;
+    try {
+      await soundToPlay.stopAsync(); // Stop the sound
+      await soundToPlay.playAsync();
+    } catch (err) {
+      console.log("error playing sound", err);
+    }
+  };
 
   const [answer, setAnswer] = useState(0);
   useEffect(() => {
@@ -82,6 +136,7 @@ const ChallengeCard = ({
         <StartButton
           pressHandler={handleStartPress}
           isDisabled={!(usableNumbers?.length > 1)}
+          setDuration={setDuration}
         />
       ) : (
         <View style={styles.cardContainer}>

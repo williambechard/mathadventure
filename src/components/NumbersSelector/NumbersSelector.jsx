@@ -13,28 +13,33 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 });
-const NumbersSelector = ({ setNumbers, gameState }) => {
+const NumbersSelector = ({ setNumbers, gameState, status, targetTile }) => {
   const [toggledNumbers, setToggledNumbers] = useState([]);
   const [allToggled, setAllToggled] = useState(false);
 
   useEffect(() => {
     setNumbers(toggledNumbers);
   }, [toggledNumbers, setNumbers]);
-
+  console.log("targetTile ", targetTile);
   const generateNumbers = () =>
-    [...Array(13)].map((_, i) => (
-      <NumberToggle
-        gameState={gameState}
-        key={i}
-        numberText={i}
-        isAllToggled={allToggled}
-        setNumberToggle={(state) =>
-          setToggledNumbers((prev) =>
-            state ? [...prev, i] : prev.filter((num) => num !== i),
-          )
-        }
-      />
-    ));
+    [...Array(13)].map((_, i) => {
+      return (
+        <NumberToggle
+          gameState={gameState}
+          key={i}
+          numberText={i}
+          isAllToggled={allToggled}
+          setNumberToggle={(state) =>
+            setToggledNumbers((prev) =>
+              state ? [...prev, i] : prev.filter((num) => num !== i),
+            )
+          }
+          isTarget={i === targetTile}
+          numberStatus={status}
+          isTracked
+        />
+      );
+    });
 
   const toggleAll = () => {
     setAllToggled((prev) => !prev);

@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
   container: {
     width: "60%",
     height: "100%",
+    paddingTop: 8,
     backgroundColor: "#E8E8E8",
   },
   rowContainer: {
@@ -36,14 +37,30 @@ const Arena = ({
   setGameState,
   setSelectedNumbers,
   isCorrect = false,
+  setChosenTiles,
+  setTargetTile,
 }) => {
   const [randomTiles, setRandomTiles] = useState(null);
   const [tileState, setTileState] = useState(Array(100).fill(-1)); // Initialize with all zeros
   const [tileValues, setTileValues] = useState(Array(100).fill(0));
-  const [selectedTileIndex, SetSelectedTileIndex] = useState(null); // Index of the selected tile
+  const [selectedTileIndex, setSelectedTileIndex] = useState(null); // Index of the selected tile
+  const [keyTiles, setKeyTiles] = useState([]);
+
   const numberTileRefs = useRef([]); // Array to store NumberTile refs
   const gridSize = 10;
   const tilesPerRow = 10;
+
+  useEffect(() => {
+    const initialChosenTiles = [];
+    let count = 0;
+    if (selectedNumbers?.length > 0) {
+      while (count < 100) {
+        initialChosenTiles.push(...selectedNumbers);
+        count += selectedNumbers.length;
+      }
+      setKeyTiles(initialChosenTiles.slice(0, 100));
+    }
+  }, [selectedNumbers]);
 
   useEffect(() => {
     switch (gameState) {
@@ -65,14 +82,10 @@ const Arena = ({
         break;
       case 5:
         if (selectedTileIndex?.length) {
-          console.log("isCorrect ", isCorrect);
-          //determine if we got the answer right
           if (isCorrect) {
             changeTileState(selectedTileIndex[0], 2);
-            changeTileState(selectedTileIndex[1], 2);
           } else {
             changeTileState(selectedTileIndex[0], 3);
-            changeTileState(selectedTileIndex[1], 3);
           }
         }
         setGameState(2);
@@ -86,13 +99,12 @@ const Arena = ({
     setTileState((prevTileState) => {
       const newTileState = [...prevTileState];
       newTileState[index] = state;
-      console.log(`Changing tile state for index ${index} to ${state}`);
       return newTileState;
     });
   };
 
   const shuffleNumberTiles = () => {
-    let shuffledNumbers = shuffleArray(selectedNumbers);
+    let shuffledNumbers = shuffleArray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
     numberTileRefs.current.forEach((tileRef, index) => {
       // Set a new random numberText from the shuffledNumbers array
@@ -107,7 +119,7 @@ const Arena = ({
       });
 
       if (shuffledNumbers.length === 0) {
-        shuffledNumbers = shuffleArray(selectedNumbers);
+        shuffledNumbers = shuffleArray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
       }
     });
     setGameState(2);
@@ -119,9 +131,14 @@ const Arena = ({
     const selNumbers = [];
     const selIndex = [];
 
-    while (selectedTiles.length < 2) {
+    //get a random index from keyTiles and pop it out of the array
+    const randomKeyIndex = Math.floor(Math.random() * keyTiles.length);
+    const randomKey = keyTiles[randomKeyIndex];
+    keyTiles.splice(randomKeyIndex, 1);
+    setTargetTile(randomKey); // <- a number of the target
+    selNumbers.push(randomKey);
+    while (selectedTiles.length < 1) {
       const randomIndex = Math.floor(Math.random() * tileState.length);
-
       // Check if the tile at randomIndex is already selected
       if (!selectedTiles.some((tile) => tile.index === randomIndex)) {
         selectedTiles.push({
@@ -133,9 +150,13 @@ const Arena = ({
         selNumbers.push(tileValues[randomIndex]);
       }
     }
-    SetSelectedTileIndex(selIndex);
+    setSelectedTileIndex(selIndex);
+
     setSelectedNumbers(selNumbers);
-    setGameState(3);
+    setChosenTiles(selNumbers);
+    setTimeout(() => {
+      setGameState(3);
+    }, 500);
     setTileState(newTileState); // Update the tileState
 
     return selectedTiles;

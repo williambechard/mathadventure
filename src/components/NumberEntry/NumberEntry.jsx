@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import NumberTile from "../NumberTile/NumberTile";
 import { Banner } from "../Banner/Banner";
+import { Audio } from "expo-av";
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -81,6 +82,37 @@ export const NumberEntry = ({ gameState, setGameState, setResponse }) => {
     React.createRef(),
     React.createRef(),
   ]);
+  const [sound, setSound] = useState();
+
+  useEffect(() => {
+    const loadSound = async () => {
+      try {
+        const { sound } = await Audio.Sound.createAsync(
+          require("../../../assets/sound/click2.mp3"),
+        );
+        setSound(sound);
+      } catch (err) {
+        console.log("error loading sound", err);
+      }
+    };
+
+    loadSound(); // Load sound when component mounts
+
+    return () => {
+      // Cleanup: unload the sound when the component unmounts
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, []);
+  const playSound = async () => {
+    try {
+      await sound.stopAsync(); // Stop the sound
+      await sound.playAsync();
+    } catch (err) {
+      console.log("error playing sound", err);
+    }
+  };
 
   const [pointer, setPointer] = useState(0);
   const [displayedNumber, setDisplayedNumber] = useState(["", "", ""]);
@@ -92,6 +124,7 @@ export const NumberEntry = ({ gameState, setGameState, setResponse }) => {
     return result;
   };
   const handlePress = (e) => {
+    playSound();
     if (gameState === 3) {
       if (!isNaN(e)) {
         const num = parseInt(e, 10);
