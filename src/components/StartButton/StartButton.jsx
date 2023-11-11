@@ -1,5 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Audio } from "expo-av";
+import DifficultySelector from "../DifficultySelector/DifficultySelector";
 
 const styles = StyleSheet.create({
   containerHovered: {
@@ -17,6 +19,11 @@ const styles = StyleSheet.create({
     border: "4px solid rgb(0, 150, 136)",
     boxShadow: "0 0 10px grey",
   },
+  wrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   text: {
     color: "rgb(0, 150, 136)",
     fontSize: 72,
@@ -26,8 +33,55 @@ const styles = StyleSheet.create({
     opacity: 0.25,
   },
 });
-export const StartButton = ({ pressHandler, isDisabled = false }) => {
+export const StartButton = ({
+  pressHandler,
+  isDisabled = false,
+  setDuration,
+}) => {
   const [isHovered, setHovered] = useState(false);
+  const [sound, setSound] = useState();
+
+  const handleDifficultySelect = (difficulty) => {
+    setDuration(difficulty);
+    // Perform any other actions based on the selected difficulty
+  };
+
+  useEffect(() => {
+    const loadSound = async () => {
+      try {
+        const { sound } = await Audio.Sound.createAsync(
+          require("../../../assets/sound/button.mp3"),
+        );
+        setSound(sound);
+      } catch (err) {
+        console.log("error loading sound", err);
+      }
+    };
+
+    loadSound(); // Load sound when component mounts
+
+    return () => {
+      // Cleanup: unload the sound when the component unmounts
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, []);
+  const playSound = async () => {
+    try {
+      await sound.stopAsync(); // Stop the sound
+      await sound.playAsync();
+    } catch (err) {
+      console.log("error playing sound", err);
+    }
+  };
+
+  const handlePress = () => {
+    playSound();
+    setTimeout(() => {
+      pressHandler();
+    }, 500);
+  };
 
   const handleMouseEnter = () => {
     if (!isDisabled) setHovered(true);
@@ -38,16 +92,19 @@ export const StartButton = ({ pressHandler, isDisabled = false }) => {
   };
 
   return (
-    <Pressable
-      onPress={pressHandler}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      disabled={isDisabled}
-      style={isDisabled ? styles.disabled : {}}
-    >
-      <View style={[styles.container, isHovered && styles.containerHovered]}>
-        <Text style={styles.text}>Start</Text>
-      </View>
-    </Pressable>
+    <View style={styles.wrapper}>
+      <Pressable
+        onPress={handlePress}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        disabled={isDisabled}
+        style={isDisabled ? styles.disabled : {}}
+      >
+        <View style={[styles.container, isHovered && styles.containerHovered]}>
+          <Text style={styles.text}>Start</Text>
+        </View>
+      </Pressable>
+      <DifficultySelector onSelectDifficulty={handleDifficultySelect} />
+    </View>
   );
 };
