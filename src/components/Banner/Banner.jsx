@@ -6,6 +6,8 @@ import {
   Modal,
   TouchableWithoutFeedback,
 } from "react-native";
+import { FadeIn } from "../FadeIn/FadeIn";
+import LottieView from "lottie-react-native";
 
 const styles = StyleSheet.create({
   container: {
@@ -31,6 +33,19 @@ const styles = StyleSheet.create({
   textIncorrect: {
     color: "red",
   },
+  animContainer: {
+    position: "absolute",
+    top: "20%",
+    left: -800,
+    zIndex: 1,
+    width: 2000,
+  },
+  animContainerStatus: {
+    position: "absolute",
+    bottom: "10%",
+    right: "10%",
+    zIndex: 1,
+  },
 });
 
 export const Banner = ({ correct, answer, visible, onClose, problem }) => {
@@ -49,6 +64,32 @@ export const Banner = ({ correct, answer, visible, onClose, problem }) => {
     >
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.container}>
+          <View style={styles.animContainer}>
+            <FadeIn duration={100}>
+              <LottieView
+                source={require(
+                  correct
+                    ? "../../../assets/animations/celebrate.json"
+                    : "../../../assets/animations/icecreamfail.json",
+                )}
+                loop
+                autoPlay
+              />
+            </FadeIn>
+          </View>
+          <View style={styles.animContainerStatus}>
+            <FadeIn duration={100}>
+              <LottieView
+                source={require(
+                  correct
+                    ? "../../../assets/animations/correct.json"
+                    : "../../../assets/animations/incorrect.json",
+                )}
+                loop
+                autoPlay
+              />
+            </FadeIn>
+          </View>
           <View style={styles.banner}>
             <Text style={styles.text}>
               {correct ? (
