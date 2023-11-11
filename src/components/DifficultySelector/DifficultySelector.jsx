@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
 });
-const DifficultySelector = ({ onSelectDifficulty }) => {
+export const DifficultySelector = ({ onSelectDifficulty }) => {
   const [difficulty, setDifficulty] = useState(20);
   const [sound, setSound] = useState();
 
