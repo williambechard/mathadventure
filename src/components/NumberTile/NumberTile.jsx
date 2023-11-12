@@ -5,39 +5,48 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { Text, StyleSheet, View, Pressable } from "react-native";
-
-const styles = StyleSheet.create({
-  containerHovered: {
-    backgroundColor: "lightblue", // Change background color on hover
-  },
-  container: {
-    width: 100,
-    height: 100,
-    backgroundColor: "#C0C0C0",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    margin: 10,
-    borderRadius: 15,
-  },
-  containerSelected: {
-    backgroundColor: "blue", // Change background color on select
-  },
-  containerCorrect: {
-    backgroundColor: "green",
-  },
-  containerIncorrect: {
-    backgroundColor: "red",
-  },
-  text: {
-    fontSize: 40,
-    padding: 1,
-  },
-  disabled: {
-    opacity: 0.25,
-  },
-});
+import {
+  Text,
+  StyleSheet,
+  View,
+  Pressable,
+  useWindowDimensions,
+} from "react-native";
+import { responsiveSize } from "../helper-functions";
+const useStyles = () => {
+  const { width, height } = useWindowDimensions();
+  return StyleSheet.create({
+    containerHovered: {
+      backgroundColor: "lightblue", // Change background color on hover
+    },
+    container: {
+      width: responsiveSize(60, width, height),
+      height: responsiveSize(60, width, height),
+      backgroundColor: "#C0C0C0",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "column",
+      margin: responsiveSize(1, width, height),
+      borderRadius: responsiveSize(10, width, height),
+    },
+    containerSelected: {
+      backgroundColor: "blue", // Change background color on select
+    },
+    containerCorrect: {
+      backgroundColor: "green",
+    },
+    containerIncorrect: {
+      backgroundColor: "red",
+    },
+    text: {
+      fontSize: responsiveSize(40, width, height),
+      padding: responsiveSize(1, width, height),
+    },
+    disabled: {
+      opacity: 0.25,
+    },
+  });
+};
 
 const NumberTile = forwardRef(
   (
@@ -54,6 +63,7 @@ const NumberTile = forwardRef(
   ) => {
     const [isHovered, setHovered] = useState(false);
     const [tileNumber, setTileNumber] = useState(numberText);
+    const styles = useStyles();
 
     useEffect(() => {
       switch (state) {

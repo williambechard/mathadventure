@@ -1,6 +1,6 @@
 import NumberToggle from "../NumberToggle/NumberToggle";
 import NumbersSelector from "../NumbersSelector/NumbersSelector";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, useWindowDimensions, View } from "react-native";
 import Arena from "../Arena/Arena";
 import ChallengeCard from "../ChallengeCard/ChallengeCard";
 import { Timer } from "../Timer/Timer";
@@ -9,29 +9,34 @@ import { useEffect, useState } from "react";
 import { Audio } from "expo-av";
 import { Welcome } from "../Welcome/Welcome";
 import musicTrack from "../../../assets/music/spring.mp3";
+import { responsiveSize } from "../helper-functions.js";
+const useStyles = () => {
+  const { width, height } = useWindowDimensions();
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "white",
-    justifyContent: "flex-start",
-    gap: 10,
-    alignItems: "center",
-    flexDirection: "column",
-  },
-  leftContainer: {
-    width: "99%",
-    height: "85%",
-    flexDirection: "row",
-  },
-  rightContainer: {
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    width: "39.5%",
-    gap: 10,
-  },
-});
+  return StyleSheet.create({
+    container: {
+      width: width,
+      height: height,
+      backgroundColor: "white",
+      justifyContent: "flex-start",
+      gap: responsiveSize(10, width, height),
+      alignItems: "flex-start",
+      flexDirection: "column",
+    },
+    leftContainer: {
+      width: "60%",
+      height: "88%",
+      flexDirection: "row",
+    },
+    rightContainer: {
+      flexDirection: "column",
+      justifyContent: "flex-start",
+      width: "65%",
+      gap: responsiveSize(10, width, height),
+      marginLeft: responsiveSize(10, width, height),
+    },
+  });
+};
 
 const GamePage = () => {
   const [usableNumbers, setUsableNumbers] = useState(null);
@@ -45,7 +50,7 @@ const GamePage = () => {
   const [chosenTiles, SetChosenTiles] = useState([]);
   const [progress, setProgress] = useState({});
   const [targetTile, setTargetTile] = useState(null);
-
+  const styles = useStyles();
   async function playSound() {
     const sound = new Audio.Sound();
     try {
@@ -139,4 +144,37 @@ const GamePage = () => {
   );
 };
 
+/*
+
+<View style={styles.leftContainer}>
+        <Arena
+          selectedNumbers={usableNumbers}
+          gameState={gameState}
+          setGameState={setGameState}
+          setSelectedNumbers={setSelectedNumbers}
+          isCorrect={isCorrect}
+          setChosenTiles={SetChosenTiles}
+          setTargetTile={setTargetTile}
+        />
+        {gameState === 3 && (
+          <Timer duration={duration} setTimeDuration={setTimeDuration} />
+        )}
+        <View style={styles.rightContainer}>
+          <ChallengeCard
+            gameState={gameState}
+            setGameState={setGameState}
+            usableNumbers={usableNumbers}
+            selectedNumbers={selectedNumbers}
+            response={response}
+            setIsCorrect={SetIsCorrect}
+            setDuration={setDuration}
+          />
+          <NumberEntry
+            gameState={gameState}
+            setGameState={setGameState}
+            setResponse={setResponse}
+          />
+        </View>
+      </View>
+ */
 export default GamePage;

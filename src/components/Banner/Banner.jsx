@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Modal,
   TouchableWithoutFeedback,
+  useWindowDimensions,
 } from "react-native";
 import { FadeIn } from "../FadeIn/FadeIn";
 import LottieView from "lottie-react-native";
@@ -13,46 +14,51 @@ import icecreamfailAnimation from "../../../assets/animations/icecreamfail.json"
 import correctAnimation from "../../../assets/animations/correct.json";
 import incorrectAnimation from "../../../assets/animations/incorrect.json";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent black background
-  },
-  banner: {
-    backgroundColor: "black",
-    padding: 20,
+import { responsiveSize } from "../helper-functions.js";
+const useStyles = () => {
+  const { width, height } = useWindowDimensions();
 
-    width: "100%",
-  },
-  text: {
-    fontSize: 120,
-    color: "white",
-    textAlign: "center",
-  },
-  textCorrect: {
-    color: "green",
-  },
-  textIncorrect: {
-    color: "red",
-  },
-  animContainer: {
-    position: "absolute",
-    top: "20%",
-    left: -800,
-    zIndex: 1,
-    width: 2000,
-  },
-  animContainerStatus: {
-    position: "absolute",
-    bottom: "10%",
-    right: "10%",
-    zIndex: 1,
-  },
-});
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent black background
+    },
+    banner: {
+      backgroundColor: "black",
+      padding: responsiveSize(20, width, height),
+      width: "100%",
+    },
+    text: {
+      fontSize: responsiveSize(120, width, height),
+      color: "white",
+      textAlign: "center",
+    },
+    textCorrect: {
+      color: "green",
+    },
+    textIncorrect: {
+      color: "red",
+    },
+    animContainer: {
+      position: "absolute",
+      top: "20%",
+      left: responsiveSize(-800, width, height),
+      zIndex: 1,
+      width: responsiveSize(2000, width, height),
+    },
+    animContainerStatus: {
+      position: "absolute",
+      bottom: "10%",
+      right: "10%",
+      zIndex: 1,
+    },
+  });
+};
 
 export const Banner = ({ correct, answer, visible, onClose, problem }) => {
+  const styles = useStyles();
   const handlePress = () => {
     if (visible) {
       onClose();

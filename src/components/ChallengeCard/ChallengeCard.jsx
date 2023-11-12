@@ -1,46 +1,59 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, useWindowDimensions } from "react-native";
 import { StartButton } from "../StartButton/StartButton";
 import NumberTile from "../NumberTile/NumberTile";
 import { Banner } from "../Banner/Banner";
 import { Audio } from "expo-av";
 import correctAudio from "../../../assets/sound/correct.mp3";
 import incorrectAudio from "../../../assets/sound/incorrect.mp3";
+import { responsiveSize } from "../helper-functions.js";
+const useStyles = () => {
+  const { width, height } = useWindowDimensions();
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    height: 200,
-    backgroundColor: "#C0C0C0",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    marginLeft: 10,
-  },
-  mainText: {
-    fontSize: 40,
-    padding: 1,
-  },
-  container: {
-    width: 140,
-    height: 140,
-    backgroundColor: "#E8E8E8",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    margin: 60,
-    borderRadius: 15,
-  },
-  text: {
-    color: "black",
-    fontSize: 100,
-    padding: 1,
-  },
-  cardContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
+  return StyleSheet.create({
+    mainContainer: {
+      height: responsiveSize(200, width, height),
+      width: "99%",
+      backgroundColor: "#C0C0C0",
+      justifyContent: "space-around",
+      alignItems: "center",
+      flexDirection: "row",
+      marginLeft: responsiveSize(10, width, height),
+    },
+    innerContainer: {
+      height: responsiveSize(200, width, height),
+      width: "100%",
+      backgroundColor: "#C0C0C0",
+      justifyContent: "space-evenly",
+      alignItems: "center",
+      flexDirection: "row",
+    },
+    container: {
+      width: responsiveSize(140, width, height),
+      height: responsiveSize(140, width, height),
+      backgroundColor: "#E8E8E8",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "column",
+      margin: responsiveSize(60, width, height),
+      borderRadius: responsiveSize(15, width, height),
+    },
+    mainText: {
+      fontSize: responsiveSize(40, width, height),
+      padding: responsiveSize(1, width, height),
+    },
+    text: {
+      color: "black",
+      fontSize: responsiveSize(100, width, height),
+      padding: responsiveSize(1, width, height),
+    },
+    cardContainer: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  });
+};
 
 const ChallengeCard = ({
   gameState,
@@ -53,7 +66,7 @@ const ChallengeCard = ({
 }) => {
   const [soundCorrect, setSoundCorrect] = useState();
   const [soundWrong, setSoundWrong] = useState();
-
+  const styles = useStyles();
   const num1Ref = useRef();
   const num2Ref = useRef();
   useEffect(() => {
@@ -137,7 +150,7 @@ const ChallengeCard = ({
           setDuration={setDuration}
         />
       ) : (
-        <View style={styles.cardContainer}>
+        <View style={styles.innerContainer}>
           <NumberTile
             ref={num1Ref}
             numberText={num1Ref.current?.state?.numberText ?? ""}

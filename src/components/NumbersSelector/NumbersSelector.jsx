@@ -1,22 +1,31 @@
-import { Text, StyleSheet, Switch, View } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  Switch,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import { useEffect, useState } from "react";
 import NumberToggle from "../NumberToggle/NumberToggle";
-
-const styles = StyleSheet.create({
-  container: {
-    width: "99%",
-    height: 140,
-    backgroundColor: "#E8E8E8",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    flexDirection: "row",
-    margin: 10,
-  },
-});
+import { responsiveSize } from "../helper-functions";
+const useStyles = () => {
+  const { width, height } = useWindowDimensions();
+  return StyleSheet.create({
+    container: {
+      width: width,
+      height: "10%",
+      backgroundColor: "#E8E8E8",
+      justifyContent: "space-evenly",
+      alignItems: "center",
+      flexDirection: "row",
+      padding: responsiveSize(10, width, height),
+    },
+  });
+};
 const NumbersSelector = ({ setNumbers, gameState, status, targetTile }) => {
   const [toggledNumbers, setToggledNumbers] = useState([]);
   const [allToggled, setAllToggled] = useState(false);
-
+  const styles = useStyles();
   useEffect(() => {
     setNumbers(toggledNumbers);
   }, [toggledNumbers, setNumbers]);

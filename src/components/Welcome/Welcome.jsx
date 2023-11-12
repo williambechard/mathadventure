@@ -3,40 +3,44 @@ import { Button, View, StyleSheet, Text } from "react-native";
 import { FadeIn } from "../FadeIn/FadeIn";
 import { Audio } from "expo-av";
 import buttonSound from "../../../assets/sound/button.mp3";
+import { responsiveSize } from "../helper-functions.js";
+import { useWindowDimensions } from "react-native";
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(0,0,0,.85)",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    position: "absolute",
-    zIndex: 1,
-  },
-  innerContainer: {
-    opacity: 1,
-    width: "50%",
-    height: "80%",
-    backgroundColor: "black",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 25,
-  },
-  text: {
-    fontSize: 120,
-    color: "white",
-  },
-  btn: {
-    fontSize: 64,
-    margin: 40,
-  },
-});
+const useStyles = () => {
+  const { width, height } = useWindowDimensions();
 
+  return StyleSheet.create({
+    container: {
+      width: width,
+      height: height,
+      backgroundColor: "rgba(0,0,0,.85)",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "column",
+      position: "absolute",
+      zIndex: 1,
+    },
+    innerContainer: {
+      opacity: 1,
+      width: "80%",
+      height: "80%",
+      backgroundColor: "black",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 25,
+    },
+    text: {
+      fontSize: responsiveSize(120, width, height),
+      margin: responsiveSize(40, width, height),
+      color: "white",
+    },
+    btn: {},
+  });
+};
 export const Welcome = ({ onPress }) => {
   const [sound, setSound] = useState();
+  const styles = useStyles();
 
   useEffect(() => {
     const loadSound = async () => {

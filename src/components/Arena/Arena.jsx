@@ -1,26 +1,30 @@
 import React, { useEffect, useState, useRef } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, useWindowDimensions, View } from "react-native";
 import NumberTile from "../NumberTile/NumberTile";
+import { responsiveSize } from "../helper-functions";
+const useStyles = () => {
+  const { width, height } = useWindowDimensions();
 
-const styles = StyleSheet.create({
-  container: {
-    width: "60%",
-    height: "100%",
-    paddingTop: 8,
-    backgroundColor: "#E8E8E8",
-  },
-  rowContainer: {
-    flexDirection: "row",
-    height: 100,
-  },
-  tile: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: 100,
-    marginTop: 4,
-    marginBottom: 2,
-  },
-});
+  return StyleSheet.create({
+    container: {
+      width: "100%",
+      height: "100%",
+      paddingTop: 8,
+      backgroundColor: "#E8E8E8",
+      padding: responsiveSize(10, width, height),
+    },
+    rowContainer: {
+      flexDirection: "row",
+    },
+    tile: {
+      alignItems: "center",
+      justifyContent: "center",
+      height: responsiveSize(80, width, height),
+      marginTop: responsiveSize(4, width, height),
+      marginBottom: responsiveSize(2, width, height),
+    },
+  });
+};
 
 const shuffleArray = (array) => {
   const shuffledArray = [...array];
@@ -45,9 +49,9 @@ const Arena = ({
   const [tileValues, setTileValues] = useState(Array(100).fill(0));
   const [selectedTileIndex, setSelectedTileIndex] = useState(null); // Index of the selected tile
   const [keyTiles, setKeyTiles] = useState([]);
-
+  const styles = useStyles();
   const numberTileRefs = useRef([]); // Array to store NumberTile refs
-  const gridSize = 10;
+  const gridSize = 12;
   const tilesPerRow = 10;
 
   useEffect(() => {

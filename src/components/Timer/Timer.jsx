@@ -1,29 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, useWindowDimensions, View } from "react-native";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import LottieView from "lottie-react-native";
 import { FadeIn } from "../FadeIn/FadeIn";
 import { Audio } from "expo-av";
 import runningClockAnimation from "../../../assets/animations/runningTime.json";
 import timerSound from "../../../assets/sound/timer.mp3";
+import { responsiveSize } from "../helper-functions.js";
+const useStyles = () => {
+  const { width, height } = useWindowDimensions();
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "white",
-    fontSize: 140,
-    fontWeight: "bold",
-    fontFamily: "sans-serif",
-    position: "absolute",
-    top: 300,
-    left: 400,
-    borderRadius: "50%",
-  },
-  animContainer: {
-    position: "absolute",
-    top: 300,
-    left: -260,
-  },
-});
+  return StyleSheet.create({
+    container: {
+      backgroundColor: "white",
+      fontSize: responsiveSize(140, width, height),
+      fontWeight: "bold",
+      fontFamily: "sans-serif",
+      position: "absolute",
+      top: responsiveSize(70, width, height),
+      left: responsiveSize(70, width, height),
+      borderRadius: "50%",
+      zIndex: 1,
+    },
+    animContainer: {
+      position: "absolute",
+      top: responsiveSize(110, width, height),
+      left: responsiveSize(-280, width, height),
+      zIndex: 2,
+    },
+  });
+};
 
 export const Timer = ({ duration, setTimeDuration }) => {
   const colors = ["#004777", "#F7B801", "#A30000", "#A30000"];
@@ -32,7 +38,7 @@ export const Timer = ({ duration, setTimeDuration }) => {
     (color, index) => (index + 1) / colors.length,
   );
   const [sound, setSound] = useState();
-
+  const styles = useStyles();
   useEffect(() => {
     let isMounted = true; // Variable to track if the component is mounted
 

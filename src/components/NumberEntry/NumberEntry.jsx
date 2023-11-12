@@ -1,81 +1,89 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, useWindowDimensions, View } from "react-native";
 import NumberTile from "../NumberTile/NumberTile";
 import { Banner } from "../Banner/Banner";
 import { Audio } from "expo-av";
-import clickSound from "../../../assets/sound/click3.mp3";
+import clickSound from "../../../assets/sound/mech-click.mp3";
+import { responsiveSize } from "../helper-functions.js";
+const useStyles = () => {
+  const { width, height } = useWindowDimensions();
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: "#C0C0C0",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    marginLeft: 10,
-    gap: 4,
-    flexDirection: "column",
-    flexWrap: "wrap",
-  },
-  mainText: {
-    fontSize: 40,
-    padding: 1,
-  },
-  container: {
-    width: 110,
-    height: 140,
-    backgroundColor: "#E8E8E8",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    margin: 30,
-    borderRadius: 15,
-  },
-  text: {
-    fontSize: 100,
-    padding: 1,
-  },
-  rowContainer: {
-    flexDirection: "row",
-    flexWrap: "nowrap",
-    width: "100%",
-    height: "17.5%",
-    justifyContent: "center",
-  },
-  numberDisplay: {
-    backgroundColor: "#AFAFAF",
-    width: "90%",
-    marginTop: 10,
-    height: "70%",
-    borderRadius: 10,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  disabled: {
-    opacity: 0.25,
-    width: 110,
-    height: 140,
-    backgroundColor: "#E8E8E8",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    margin: 30,
-    borderRadius: 15,
-  },
-});
+  return StyleSheet.create({
+    mainContainer: {
+      flex: 1,
+      backgroundColor: "#C0C0C0",
+      justifyContent: "flex-start",
+      alignItems: "center",
+      marginLeft: responsiveSize(10, width, height),
+      gap: responsiveSize(4, width, height),
+      flexDirection: "column",
+      flexWrap: "wrap",
+    },
+    mainText: {
+      fontSize: responsiveSize(40, width, height),
+      padding: responsiveSize(1, width, height),
+    },
+    container: {
+      width: responsiveSize(110, width, height),
+      height: responsiveSize(100, width, height),
+      backgroundColor: "#E8E8E8",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "column",
+      margin: responsiveSize(30, width, height),
+      borderRadius: responsiveSize(15, width, height),
+      flex: 1,
+    },
+    text: {
+      fontSize: responsiveSize(100, width, height),
+      padding: responsiveSize(1, width, height),
+    },
+    rowContainer: {
+      flexDirection: "row",
+      flexWrap: "nowrap",
+      width: "100%",
+      height: "17.5%",
+      justifyContent: "center",
+    },
+    numberDisplay: {
+      backgroundColor: "#AFAFAF",
+      width: "90%",
+      marginTop: responsiveSize(10, width, height),
+      height: "70%",
+      borderRadius: responsiveSize(10, width, height),
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    disabled: {
+      opacity: 0.25,
+      width: responsiveSize(110, width, height),
+      height: responsiveSize(140, width, height),
+      backgroundColor: "#E8E8E8",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "column",
+      margin: responsiveSize(30, width, height),
+      borderRadius: responsiveSize(15, width, height),
+    },
+  });
+};
+const displayStyle = () => {
+  const { width, height } = useWindowDimensions();
 
-const displayStyle = StyleSheet.create({
-  container: {
-    width: 80,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  text: {
-    color: "rgb(0,150,136)",
-    fontSize: 100,
-  },
-});
+  return StyleSheet.create({
+    container: {
+      width: responsiveSize(80, width, height),
+      height: responsiveSize(40, width, height),
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    text: {
+      color: "rgb(0,150,136)",
+      fontSize: responsiveSize(100, width, height),
+    },
+  });
+};
 
 export const NumberEntry = ({ gameState, setGameState, setResponse }) => {
   const numberTileRefs = useRef([
@@ -84,7 +92,7 @@ export const NumberEntry = ({ gameState, setGameState, setResponse }) => {
     React.createRef(),
   ]);
   const [sound, setSound] = useState();
-
+  const styles = useStyles();
   useEffect(() => {
     const loadSound = async () => {
       try {
@@ -266,7 +274,7 @@ export const NumberEntry = ({ gameState, setGameState, setResponse }) => {
         <NumberTile
           customStyles={{
             ...styles,
-            text: { fontSize: 80, padding: 1 },
+            text: { fontSize: 40, padding: 1 },
             containerHovered: { backgroundColor: "#DAF7A6" },
           }}
           numberText={"OK"}

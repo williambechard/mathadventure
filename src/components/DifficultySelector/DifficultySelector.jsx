@@ -1,32 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
 import { RadioButton } from "react-native-paper";
 import { Audio } from "expo-av";
 import clickAudio from "../../../assets/sound/click3.mp3";
 
-const styles = StyleSheet.create({
-  text: {
-    color: "rgb(0, 150, 136)",
-    fontSize: 22,
-    fontWeight: "bold",
-  },
-  radioText: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  container: {
-    justifyContent: "flex-start",
-    margin: 20,
-  },
-  row: {
-    width: 200,
-    padding: 4,
-  },
-});
+import { responsiveSize } from "../helper-functions.js";
+const useStyles = () => {
+  const { width, height } = useWindowDimensions();
+  return StyleSheet.create({
+    text: {
+      color: "rgb(0, 150, 136)",
+      fontSize: responsiveSize(14, width, height),
+      fontWeight: "bold",
+    },
+    radioText: {
+      fontSize: responsiveSize(14, width, height),
+      fontWeight: "bold",
+      padding: responsiveSize(10, width, height),
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    container: {
+      margin: responsiveSize(10, width, height),
+      flex: 1,
+    },
+    row: {
+      flexDirection: "row",
+      justifyContent: "flex-start",
+      height: responsiveSize(50, width, height),
+      padding: responsiveSize(4, width, height),
+    },
+  });
+};
 export const DifficultySelector = ({ onSelectDifficulty }) => {
   const [difficulty, setDifficulty] = useState(20);
   const [sound, setSound] = useState();
-
+  const styles = useStyles();
   useEffect(() => {
     const loadSound = async () => {
       try {
@@ -68,22 +77,16 @@ export const DifficultySelector = ({ onSelectDifficulty }) => {
         value={difficulty}
       >
         <View style={styles.row}>
-          <Text style={styles.radioText}>
-            <RadioButton value={20} />
-            Easy - 20s Timer
-          </Text>
+          <RadioButton value={20} />
+          <Text style={styles.radioText}>Easy - 20s Timer</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.radioText}>
-            <RadioButton value={12} />
-            Medium - 12s Timer
-          </Text>
+          <RadioButton value={12} />
+          <Text style={styles.radioText}>Med - 12s Timer</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.radioText}>
-            <RadioButton value={6} />
-            Hard - 6s Timer
-          </Text>
+          <RadioButton value={6} />
+          <Text style={styles.radioText}>Hard - 6s Timer</Text>
         </View>
       </RadioButton.Group>
     </View>

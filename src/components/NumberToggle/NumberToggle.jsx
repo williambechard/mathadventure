@@ -1,67 +1,77 @@
-import { Text, StyleSheet, Switch, View } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  Switch,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import { useEffect, useState } from "react";
 import * as Progress from "react-native-progress";
 import { Audio } from "expo-av";
 import clickSound from "../../../assets/sound/mech-click.mp3";
-const styles = StyleSheet.create({
-  outerContainer: {
-    flexDirection: "row",
-    margin: 10,
-    borderRadius: 20,
-  },
-  container: {
-    width: 100,
-    height: 100,
-    backgroundColor: "#C0C0C0",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    flexDirection: "column",
-    borderTopRightRadius: 15,
-    borderBottomRightRadius: 15,
-  },
-  switch: {
-    height: 30,
-    width: 80,
-    margin: 4,
-  },
-  text: {
-    fontSize: 40,
-    padding: 1,
-  },
-  switchOn: {
-    backgroundColor: "#DAF7A6",
-  },
-  disabled: {
-    opacity: 0.25,
-  },
-  progressContainer: {
-    width: 20,
-    height: 100,
-    backgroundColor: "white",
-    border: "2px solid grey",
-    borderTopLeftRadius: 15,
-    borderBottomLeftRadius: 15,
-  },
-  correctAmount: {
-    height: "100%",
-    backgroundColor: "green",
-    borderTopLeftRadius: 15,
-    borderBottomLeftRadius: 15,
-  },
-  stepContainer: {
-    borderTopLeftRadius: 15,
-    borderBottomLeftRadius: 15,
-  },
-  incorrectAmount: {
-    width: 20,
-    height: "80%",
-    backgroundColor: "red",
-    zIndex: 1,
-    borderTopLeftRadius: 15,
-    borderBottomLeftRadius: 15,
-  },
-});
-
+import { responsiveSize } from "../helper-functions.js";
+const useStyles = () => {
+  const { width, height } = useWindowDimensions();
+  return StyleSheet.create({
+    outerContainer: {
+      flexDirection: "row",
+      margin: responsiveSize(2, width, height),
+      borderRadius: responsiveSize(10, width, height),
+    },
+    container: {
+      width: responsiveSize(65, width, height),
+      height: responsiveSize(80, width, height),
+      backgroundColor: "#C0C0C0",
+      justifyContent: "flex-start",
+      alignItems: "center",
+      flexDirection: "column",
+      borderTopRightRadius: responsiveSize(10, width, height),
+      borderBottomRightRadius: responsiveSize(10, width, height),
+      flex: 1,
+    },
+    switch: {
+      height: responsiveSize(20, width, height),
+      width: responsiveSize(60, width, height),
+      margin: responsiveSize(1, width, height),
+    },
+    text: {
+      fontSize: responsiveSize(20, width, height),
+      padding: responsiveSize(1, width, height),
+    },
+    switchOn: {
+      backgroundColor: "#DAF7A6",
+    },
+    disabled: {
+      opacity: 0.25,
+    },
+    progressContainer: {
+      width: responsiveSize(10, width, height),
+      height: responsiveSize(100, width, height),
+      backgroundColor: "white",
+      border: "2px solid grey",
+      borderTopLeftRadius: responsiveSize(15, width, height),
+      borderBottomLeftRadius: responsiveSize(15, width, height),
+    },
+    correctAmount: {
+      height: "100%",
+      backgroundColor: "green",
+      borderTopLeftRadius: responsiveSize(15, width, height),
+      borderBottomLeftRadius: responsiveSize(15, width, height),
+    },
+    stepContainer: {
+      borderTopLeftRadius: responsiveSize(15, width, height),
+      borderBottomLeftRadius: responsiveSize(15, width, height),
+    },
+    incorrectAmount: {
+      width: responsiveSize(10, width, height),
+      height: "80%",
+      backgroundColor: "red",
+      zIndex: 1,
+      borderTopLeftRadius: responsiveSize(15, width, height),
+      borderBottomLeftRadius: responsiveSize(15, width, height),
+    },
+  });
+};
 const NumberToggle = ({
   numberText,
   setNumberToggle,
@@ -73,7 +83,7 @@ const NumberToggle = ({
 }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [sound, setSound] = useState();
-
+  const styles = useStyles();
   const trackedStatus = isTracked
     ? numberStatus[numberText] || { correct: 0, incorrect: 0 }
     : { correct: 0, incorrect: 0 };
