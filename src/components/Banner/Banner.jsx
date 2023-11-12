@@ -8,6 +8,10 @@ import {
 } from "react-native";
 import { FadeIn } from "../FadeIn/FadeIn";
 import LottieView from "lottie-react-native";
+import celebrateAnimation from "../../../assets/animations/celebrate.json";
+import icecreamfailAnimation from "../../../assets/animations/icecreamfail.json";
+import correctAnimation from "../../../assets/animations/correct.json";
+import incorrectAnimation from "../../../assets/animations/incorrect.json";
 
 const styles = StyleSheet.create({
   container: {
@@ -67,11 +71,7 @@ export const Banner = ({ correct, answer, visible, onClose, problem }) => {
           <View style={styles.animContainer}>
             <FadeIn duration={100}>
               <LottieView
-                source={require(
-                  correct
-                    ? "../../../assets/animations/celebrate.json"
-                    : "../../../assets/animations/icecreamfail.json",
-                )}
+                source={correct ? celebrateAnimation : icecreamfailAnimation}
                 loop
                 autoPlay
               />
@@ -80,11 +80,7 @@ export const Banner = ({ correct, answer, visible, onClose, problem }) => {
           <View style={styles.animContainerStatus}>
             <FadeIn duration={100}>
               <LottieView
-                source={require(
-                  correct
-                    ? "../../../assets/animations/correct.json"
-                    : "../../../assets/animations/incorrect.json",
-                )}
+                source={correct ? correctAnimation : incorrectAnimation}
                 loop
                 autoPlay
               />

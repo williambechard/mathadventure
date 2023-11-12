@@ -8,6 +8,7 @@ import { NumberEntry } from "../NumberEntry/NumberEntry";
 import { useEffect, useState } from "react";
 import { Audio } from "expo-av";
 import { Welcome } from "../Welcome/Welcome";
+import musicTrack from "../../../assets/music/spring.mp3";
 
 const styles = StyleSheet.create({
   container: {
@@ -48,7 +49,7 @@ const GamePage = () => {
   async function playSound() {
     const sound = new Audio.Sound();
     try {
-      await sound.loadAsync(require("../../../assets/music/spring.mp3"));
+      await sound.loadAsync(musicTrack);
       await sound.playAsync({ isLooping: true }); // Add isLooping: true
     } catch (err) {
       console.log("error ", err);

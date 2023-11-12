@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import NumberTile from "../NumberTile/NumberTile";
 import { Banner } from "../Banner/Banner";
 import { Audio } from "expo-av";
+import clickSound from "../../../assets/sound/click3.mp3";
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -87,9 +88,7 @@ export const NumberEntry = ({ gameState, setGameState, setResponse }) => {
   useEffect(() => {
     const loadSound = async () => {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("../../../assets/sound/click2.mp3"),
-        );
+        const { sound } = await Audio.Sound.createAsync(clickSound);
         setSound(sound);
       } catch (err) {
         console.log("error loading sound", err);

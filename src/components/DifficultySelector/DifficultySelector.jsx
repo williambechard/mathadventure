@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { RadioButton } from "react-native-paper";
 import { Audio } from "expo-av";
+import clickAudio from "../../../assets/sound/click3.mp3";
 
 const styles = StyleSheet.create({
   text: {
@@ -29,9 +30,7 @@ export const DifficultySelector = ({ onSelectDifficulty }) => {
   useEffect(() => {
     const loadSound = async () => {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("../../../assets/sound/click3.mp3"),
-        );
+        const { sound } = await Audio.Sound.createAsync(clickAudio);
         setSound(sound);
       } catch (err) {
         console.log("error loading sound", err);

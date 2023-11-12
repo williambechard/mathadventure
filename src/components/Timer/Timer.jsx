@@ -4,6 +4,8 @@ import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import LottieView from "lottie-react-native";
 import { FadeIn } from "../FadeIn/FadeIn";
 import { Audio } from "expo-av";
+import runningClockAnimation from "../../../assets/animations/runningTime.json";
+import timerSound from "../../../assets/sound/timer.mp3";
 
 const styles = StyleSheet.create({
   container: {
@@ -36,9 +38,7 @@ export const Timer = ({ duration, setTimeDuration }) => {
 
     const loadSound = async () => {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("../../../assets/sound/timer.mp3"),
-        );
+        const { sound } = await Audio.Sound.createAsync(timerSound);
         setSound(sound);
       } catch (err) {
         console.log("error loading sound", err);
@@ -98,11 +98,7 @@ export const Timer = ({ duration, setTimeDuration }) => {
       {showLottie && (
         <View style={styles.animContainer}>
           <FadeIn duration={1000}>
-            <LottieView
-              source={require("../../../assets/animations/runningTime.json")}
-              loop
-              autoPlay
-            />
+            <LottieView source={runningClockAnimation} loop autoPlay />
           </FadeIn>
         </View>
       )}

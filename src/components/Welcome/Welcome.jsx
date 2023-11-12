@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, View, StyleSheet, Text } from "react-native";
 import { FadeIn } from "../FadeIn/FadeIn";
 import { Audio } from "expo-av";
+import buttonSound from "../../../assets/sound/button.mp3";
 
 const styles = StyleSheet.create({
   container: {
@@ -40,9 +41,7 @@ export const Welcome = ({ onPress }) => {
   useEffect(() => {
     const loadSound = async () => {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("../../../assets/sound/button.mp3"),
-        );
+        const { sound } = await Audio.Sound.createAsync(buttonSound);
         setSound(sound);
       } catch (err) {
         console.log("error loading sound", err);

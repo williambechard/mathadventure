@@ -2,7 +2,7 @@ import { Text, StyleSheet, Switch, View } from "react-native";
 import { useEffect, useState } from "react";
 import * as Progress from "react-native-progress";
 import { Audio } from "expo-av";
-
+import clickSound from "../../../assets/sound/mech-click.mp3";
 const styles = StyleSheet.create({
   outerContainer: {
     flexDirection: "row",
@@ -81,9 +81,7 @@ const NumberToggle = ({
   useEffect(() => {
     const loadSound = async () => {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("../../../assets/sound/mech-click.mp3"),
-        );
+        const { sound } = await Audio.Sound.createAsync(clickSound);
         setSound(sound);
       } catch (err) {
         console.log("error loading sound", err);

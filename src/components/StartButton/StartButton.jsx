@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import { Audio } from "expo-av";
 import DifficultySelector from "../DifficultySelector/DifficultySelector";
+import buttonSound from "../../../assets/sound/button.mp3";
 
 const styles = StyleSheet.create({
   containerHovered: {
@@ -49,9 +50,7 @@ export const StartButton = ({
   useEffect(() => {
     const loadSound = async () => {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("../../../assets/sound/button.mp3"),
-        );
+        const { sound } = await Audio.Sound.createAsync(buttonSound);
         setSound(sound);
       } catch (err) {
         console.log("error loading sound", err);

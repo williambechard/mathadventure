@@ -4,6 +4,8 @@ import { StartButton } from "../StartButton/StartButton";
 import NumberTile from "../NumberTile/NumberTile";
 import { Banner } from "../Banner/Banner";
 import { Audio } from "expo-av";
+import correctAudio from "../../../assets/sound/correct.mp3";
+import incorrectAudio from "../../../assets/sound/incorrect.mp3";
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -57,13 +59,9 @@ const ChallengeCard = ({
   useEffect(() => {
     const loadSound = async () => {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("../../../assets/sound/correct.mp3"),
-        );
+        const { sound } = await Audio.Sound.createAsync(correctAudio);
         setSoundCorrect(sound);
-        const { sound: sound2 } = await Audio.Sound.createAsync(
-          require("../../../assets/sound/incorrect.mp3"),
-        );
+        const { sound: sound2 } = await Audio.Sound.createAsync(incorrectAudio);
         setSoundWrong(sound2);
       } catch (err) {
         console.log("error loading sound", err);
