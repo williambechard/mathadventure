@@ -31,7 +31,7 @@ const NumbersSelector = ({ setNumbers, gameState, status, targetTile }) => {
   useEffect(() => {
     setNumbers(toggledNumbers);
   }, [toggledNumbers, setNumbers]);
-  console.log("targetTile ", targetTile);
+
   const generateNumbers = () =>
     [...Array(13)].map((_, i) => {
       return (

@@ -95,7 +95,6 @@ export const DifficultySelector = ({ onSelectDifficulty }) => {
               <RadioButton.Item
                 value={20}
                 label="Easy - 20s"
-                style={{ width: "100%" }}
                 labelStyle={{ fontSize: "6vw" }}
                 position={"leading"}
               />
@@ -106,7 +105,6 @@ export const DifficultySelector = ({ onSelectDifficulty }) => {
               <RadioButton.Item
                 value={12}
                 label="Med - 12s"
-                style={{ width: "100%" }}
                 labelStyle={{ fontSize: "6vw" }}
                 position={"leading"}
               />
@@ -117,7 +115,6 @@ export const DifficultySelector = ({ onSelectDifficulty }) => {
               <RadioButton.Item
                 value={6}
                 label="Hard - 6s"
-                style={{ width: "100%" }}
                 labelStyle={{ fontSize: "6vw" }}
                 position={"leading"}
               />

@@ -47,18 +47,23 @@ const Arena = ({
   duration,
   setTimeDuration,
 }) => {
+  const gridSize = 13;
+  const tilesPerRow = 13;
   const [randomTiles, setRandomTiles] = useState(null);
-  const [tileState, setTileState] = useState(Array(100).fill(-1)); // Initialize with all zeros
-  const [tileValues, setTileValues] = useState(Array(100).fill(0));
+  const [tileState, setTileState] = useState(
+    Array(gridSize * tilesPerRow).fill(-1),
+  ); // Initialize with all zeros
+  const [tileValues, setTileValues] = useState(
+    Array(gridSize * tilesPerRow).fill(0),
+  );
   const [selectedTileIndex, setSelectedTileIndex] = useState(null); // Index of the selected tile
   const [keyTiles, setKeyTiles] = useState([]);
   const [headerNumbers, setHeaderNumbers] = useState([]);
   const [headerNumbersState, setHeaderNumbersState] = useState([]);
   const [headerIndex, setHeaderIndex] = useState(-1);
+  const [prePickedTiles, setPrePickedTiles] = useState([]);
   const styles = useStyles();
   const numberTileRefs = useRef([]); // Array to store NumberTile refs
-  const gridSize = 13;
-  const tilesPerRow = 13;
 
   useEffect(() => {
     switch (gameState) {
@@ -71,6 +76,7 @@ const Arena = ({
       case 1:
         setTimeout(() => {
           setNumberTiles();
+          prePick();
         }, 500);
         break;
       case 2:
@@ -88,6 +94,8 @@ const Arena = ({
             changeTileState(selectedTileIndex[0], 3);
           }
         }
+        //remove from possible indexes
+        console.log("selectedTileIndex ", selectedTileIndex);
         setGameState(2);
         break;
       default:
@@ -102,6 +110,26 @@ const Arena = ({
       return newTileState;
     });
   };
+
+  function prePick() {
+    const selectedTiles = [];
+    const unchosenIndexes = [...Array(tileState.length).keys()]; // Array of all indexes initially
+
+    while (unchosenIndexes.length > 0) {
+      const randomIndex =
+        unchosenIndexes[Math.floor(Math.random() * unchosenIndexes.length)];
+
+      // Check if the tile at randomIndex is already selected
+      if (!selectedTiles.some((tile) => tile.index === randomIndex)) {
+        selectedTiles.push(randomIndex);
+        // Remove the chosen index from unchosenIndexes
+        unchosenIndexes.splice(unchosenIndexes.indexOf(randomIndex), 1);
+      }
+    }
+    setPrePickedTiles(selectedTiles);
+    console.log("seltiles.length ", selectedTiles.length);
+    return selectedTiles;
+  }
 
   const setNumberTiles = () => {
     const grid = [];
@@ -144,8 +172,10 @@ const Arena = ({
         newHeaderNumbersState[headerIndex] = 0;
         return newHeaderNumbersState;
       });
-    while (selectedTiles.length < 1) {
-      const randomIndex = Math.floor(Math.random() * tileState.length);
+
+    if (prePickedTiles.length > 0) {
+      const randomIndex = prePickedTiles.shift();
+      console.log("randomIndex ", randomIndex);
       const selColumn = randomIndex % tilesPerRow;
       console.log("selColumn ", selColumn);
       // Check if the tile at randomIndex is already selected
@@ -166,7 +196,11 @@ const Arena = ({
         setHeaderIndex(selColumn);
         selNumbers.push(tileValues[randomIndex]);
       }
+    } else {
+      //game over
+      console.error("game over");
     }
+    console.log("tiles left ", prePickedTiles.length);
     setSelectedTileIndex(selIndex);
 
     setSelectedNumbers(selNumbers);
@@ -235,7 +269,7 @@ const Arena = ({
     }
     return headerRow;
   };
-  console.log("hnumstate ", headerNumbersState);
+
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
