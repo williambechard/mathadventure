@@ -14,8 +14,8 @@ const useStyles = () => {
       backgroundColor: "#C0C0C0",
       justifyContent: "flex-start",
       alignItems: "center",
-      marginLeft: responsiveSize(10, width, height),
-      gap: responsiveSize(4, width, height),
+
+      gap: responsiveSize(2, width, height),
       flexDirection: "column",
       flexWrap: "wrap",
     },
@@ -24,32 +24,32 @@ const useStyles = () => {
       padding: responsiveSize(1, width, height),
     },
     container: {
-      width: responsiveSize(110, width, height),
-      height: responsiveSize(100, width, height),
       backgroundColor: "#E8E8E8",
       justifyContent: "center",
       alignItems: "center",
       flexDirection: "column",
-      margin: responsiveSize(30, width, height),
       borderRadius: responsiveSize(15, width, height),
-      flex: 1,
+      height: "100%",
     },
     text: {
-      fontSize: responsiveSize(100, width, height),
+      fontSize: responsiveSize(40, width, height),
       padding: responsiveSize(1, width, height),
     },
     rowContainer: {
       flexDirection: "row",
       flexWrap: "nowrap",
       width: "100%",
-      height: "17.5%",
+      flex: 2,
+      padding: responsiveSize(10, width, height),
+      height: responsiveSize(100, width, height),
       justifyContent: "center",
+      gap: responsiveSize(8, width, height),
     },
     numberDisplay: {
       backgroundColor: "#AFAFAF",
-      width: "90%",
-      marginTop: responsiveSize(10, width, height),
-      height: "70%",
+      flex: 1,
+      marginTop: responsiveSize(2, width, height),
+      height: "100%",
       borderRadius: responsiveSize(10, width, height),
       flexDirection: "row",
       justifyContent: "center",
@@ -66,6 +66,9 @@ const useStyles = () => {
       margin: responsiveSize(30, width, height),
       borderRadius: responsiveSize(15, width, height),
     },
+    outerContainer: {
+      flex: 1,
+    },
   });
 };
 const displayStyle = () => {
@@ -74,13 +77,13 @@ const displayStyle = () => {
   return StyleSheet.create({
     container: {
       width: responsiveSize(80, width, height),
-      height: responsiveSize(40, width, height),
+      height: responsiveSize(80, width, height),
       justifyContent: "center",
       alignItems: "center",
     },
     text: {
       color: "rgb(0,150,136)",
-      fontSize: responsiveSize(100, width, height),
+      fontSize: responsiveSize(50, width, height),
     },
   });
 };
@@ -93,6 +96,7 @@ export const NumberEntry = ({ gameState, setGameState, setResponse }) => {
   ]);
   const [sound, setSound] = useState();
   const styles = useStyles();
+  const displayStyles = displayStyle();
   useEffect(() => {
     const loadSound = async () => {
       try {
@@ -176,7 +180,7 @@ export const NumberEntry = ({ gameState, setGameState, setResponse }) => {
             <NumberTile
               key={index}
               ref={ref}
-              customStyles={displayStyle}
+              customStyles={displayStyles}
               numberText={displayedNumber[index].toString()}
               onHoverEffect={false}
               hideText={false}

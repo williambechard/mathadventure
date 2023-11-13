@@ -13,12 +13,10 @@ const useStyles = () => {
   return StyleSheet.create({
     mainContainer: {
       height: responsiveSize(200, width, height),
-      width: "99%",
       backgroundColor: "#C0C0C0",
       justifyContent: "space-around",
       alignItems: "center",
       flexDirection: "row",
-      marginLeft: responsiveSize(10, width, height),
     },
     innerContainer: {
       height: responsiveSize(200, width, height),
@@ -121,10 +119,6 @@ const ChallengeCard = ({
     setIsCorrect(response === selectedNumbers[0] * selectedNumbers[1]);
   }, [response]);
 
-  const handleStartPress = () => {
-    setGameState(1);
-  };
-
   const handleSubmitAnswer = () => {
     setGameState(5);
   };
@@ -143,13 +137,7 @@ const ChallengeCard = ({
     />
   ) : (
     <View style={styles.mainContainer}>
-      {gameState === 0 ? (
-        <StartButton
-          pressHandler={handleStartPress}
-          isDisabled={!(usableNumbers?.length > 1)}
-          setDuration={setDuration}
-        />
-      ) : (
+      {gameState === 0 ? null : (
         <View style={styles.innerContainer}>
           <NumberTile
             ref={num1Ref}

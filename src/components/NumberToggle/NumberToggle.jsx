@@ -14,13 +14,11 @@ const useStyles = () => {
   const { width, height } = useWindowDimensions();
   return StyleSheet.create({
     outerContainer: {
+      flex: 1,
       flexDirection: "row",
-      margin: responsiveSize(2, width, height),
       borderRadius: responsiveSize(10, width, height),
     },
     container: {
-      width: responsiveSize(65, width, height),
-      height: responsiveSize(80, width, height),
       backgroundColor: "#C0C0C0",
       justifyContent: "flex-start",
       alignItems: "center",
@@ -30,13 +28,19 @@ const useStyles = () => {
       flex: 1,
     },
     switch: {
-      height: responsiveSize(20, width, height),
-      width: responsiveSize(60, width, height),
-      margin: responsiveSize(1, width, height),
+      width: "90%",
+      margin: "4%",
     },
     text: {
       fontSize: responsiveSize(20, width, height),
-      padding: responsiveSize(1, width, height),
+      padding: "10%",
+      flex: 1,
+    },
+    textContainer: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      flex: 1,
     },
     switchOn: {
       backgroundColor: "#DAF7A6",
@@ -45,7 +49,7 @@ const useStyles = () => {
       opacity: 0.25,
     },
     progressContainer: {
-      width: responsiveSize(10, width, height),
+      width: "3vw",
       height: responsiveSize(100, width, height),
       backgroundColor: "white",
       border: "2px solid grey",
@@ -63,7 +67,7 @@ const useStyles = () => {
       borderBottomLeftRadius: responsiveSize(15, width, height),
     },
     incorrectAmount: {
-      width: responsiveSize(10, width, height),
+      width: "3vw",
       height: "80%",
       backgroundColor: "red",
       zIndex: 1,
@@ -174,7 +178,9 @@ const NumberToggle = ({
           !isTracked && { borderTopLeftRadius: 15, borderBottomLeftRadius: 15 },
         ]}
       >
-        <Text style={styles.text}>{numberText}</Text>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>{numberText}</Text>
+        </View>
         <Switch
           style={styles.switch}
           onValueChange={toggleSwitch}

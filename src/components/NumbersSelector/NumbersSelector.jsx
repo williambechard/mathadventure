@@ -12,12 +12,14 @@ const useStyles = () => {
   const { width, height } = useWindowDimensions();
   return StyleSheet.create({
     container: {
-      width: width,
-      height: "10%",
+      width: "6%",
+      height: height,
       backgroundColor: "#E8E8E8",
       justifyContent: "space-evenly",
-      alignItems: "center",
-      flexDirection: "row",
+      alignItems: "stretch",
+      flexDirection: "column",
+      flex: 1,
+      gap: "1%",
       padding: responsiveSize(10, width, height),
     },
   });
@@ -59,7 +61,6 @@ const NumbersSelector = ({ setNumbers, gameState, status, targetTile }) => {
 
   return (
     <View style={styles.container}>
-      {generateNumbers()}
       <NumberToggle
         gameState={gameState}
         numberText={"All"}
@@ -67,6 +68,7 @@ const NumbersSelector = ({ setNumbers, gameState, status, targetTile }) => {
         isAllToggled={allToggled}
         setNumberToggle={toggleAll}
       />
+      {generateNumbers()}
     </View>
   );
 };

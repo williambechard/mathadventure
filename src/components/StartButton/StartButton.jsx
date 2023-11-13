@@ -18,10 +18,8 @@ const useStyles = () => {
       backgroundColor: "#DAF7A6",
     },
     container: {
-      flex: 2,
-
       height: responsiveSize(140, width, height),
-      backgroundColor: "#F5F5F5",
+      backgroundColor: "rgb(218, 247, 166)",
       justifyContent: "center",
       alignItems: "center",
       flexDirection: "column",
@@ -31,9 +29,10 @@ const useStyles = () => {
       boxShadow: "0 0 10px grey",
     },
     wrapper: {
-      flexDirection: "row",
+      flexDirection: "column",
       justifyContent: "space-between",
       alignItems: "center",
+      width: "100%",
     },
     text: {
       color: "rgb(0, 150, 136)",
@@ -109,7 +108,7 @@ export const StartButton = ({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         disabled={isDisabled}
-        style={isDisabled ? styles.disabled : {}}
+        style={[{ flex: 2, width: "100%" }, isDisabled && styles.disabled]}
       >
         <View style={[styles.container, isHovered && styles.containerHovered]}>
           <Text style={styles.text}>Start</Text>

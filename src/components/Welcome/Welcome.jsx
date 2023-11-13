@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
-import { Button, View, StyleSheet, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Button, View, StyleSheet, Text, Pressable } from "react-native";
 import { FadeIn } from "../FadeIn/FadeIn";
 import { Audio } from "expo-av";
 import buttonSound from "../../../assets/sound/button.mp3";
 import { responsiveSize } from "../helper-functions.js";
 import { useWindowDimensions } from "react-native";
+import { StartButton } from "../StartButton/StartButton";
 
 const useStyles = () => {
   const { width, height } = useWindowDimensions();
@@ -30,15 +31,37 @@ const useStyles = () => {
       alignItems: "center",
       borderRadius: 25,
     },
+    content: {
+      width: "100%",
+      height: "100%",
+      flexDirection: "column",
+      gap: "1%",
+      justifyContent: "center",
+      alignItems: "center",
+    },
     text: {
-      fontSize: responsiveSize(120, width, height),
-      margin: responsiveSize(40, width, height),
+      fontSize: "14vw",
+      margin: "1%",
       color: "white",
     },
-    btn: {},
+    button: {
+      width: "90%",
+      height: "20%",
+      margin: "2%",
+      backgroundColor: "rgb(0, 150, 136)",
+      borderRadius: 15,
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    buttonText: {
+      fontSize: "4vw",
+      padding: "10%",
+      color: "white",
+    },
   });
 };
-export const Welcome = ({ onPress }) => {
+export const Welcome = ({ onPress, setGameState, setDuration }) => {
   const [sound, setSound] = useState();
   const styles = useStyles();
 
@@ -81,13 +104,11 @@ export const Welcome = ({ onPress }) => {
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <FadeIn duration={1000}>
-          <Text style={styles.text}>Welcome!</Text>
-          <View style={styles.btn}>
-            <Button
-              type={"Submit"}
-              title={`Let's Play!`}
-              onPress={handlePress}
-            />
+          <View style={styles.content}>
+            <Text style={styles.text}>Welcome</Text>
+            <Pressable onPress={handlePress} style={styles.button}>
+              <Text style={styles.buttonText}>Let's Play!</Text>
+            </Pressable>
           </View>
         </FadeIn>
       </View>

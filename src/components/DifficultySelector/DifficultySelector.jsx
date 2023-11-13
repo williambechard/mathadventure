@@ -10,25 +10,38 @@ const useStyles = () => {
   return StyleSheet.create({
     text: {
       color: "rgb(0, 150, 136)",
-      fontSize: responsiveSize(14, width, height),
+      fontSize: "6vw",
       fontWeight: "bold",
     },
+    centerText: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+    },
     radioText: {
-      fontSize: responsiveSize(14, width, height),
+      fontSize: "6vw",
       fontWeight: "bold",
-      padding: responsiveSize(10, width, height),
+      padding: "4%",
       justifyContent: "center",
       alignItems: "center",
     },
     container: {
-      margin: responsiveSize(10, width, height),
       flex: 1,
+      width: "100%",
+      justifyContent: "center",
+      alignItems: "center",
     },
     row: {
       flexDirection: "row",
       justifyContent: "flex-start",
-      height: responsiveSize(50, width, height),
-      padding: responsiveSize(4, width, height),
+      height: "18vw",
+      width: "100%",
+      padding: "1%",
+      flex: 1,
+    },
+    radioGroup: {
+      width: "100%",
+      justifyContent: "space-evenly",
     },
   });
 };
@@ -72,23 +85,37 @@ export const DifficultySelector = ({ onSelectDifficulty }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Select Difficulty:</Text>
-      <RadioButton.Group
-        onValueChange={handleDifficultyChange}
-        value={difficulty}
-      >
-        <View style={styles.row}>
-          <RadioButton value={20} />
-          <Text style={styles.radioText}>Easy - 20s Timer</Text>
-        </View>
-        <View style={styles.row}>
-          <RadioButton value={12} />
-          <Text style={styles.radioText}>Med - 12s Timer</Text>
-        </View>
-        <View style={styles.row}>
-          <RadioButton value={6} />
-          <Text style={styles.radioText}>Hard - 6s Timer</Text>
-        </View>
-      </RadioButton.Group>
+      <View style={styles.radioGroup}>
+        <RadioButton.Group
+          onValueChange={handleDifficultyChange}
+          value={difficulty}
+        >
+          <View style={styles.row}>
+            <View style={styles.centerText}>
+              <RadioButton value={20} />
+            </View>
+            <View style={styles.centerText}>
+              <Text style={styles.radioText}>Easy - 20s</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.centerText}>
+              <RadioButton value={12} />
+            </View>
+            <View style={styles.centerText}>
+              <Text style={styles.radioText}>Med - 12s</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.centerText}>
+              <RadioButton value={6} />
+            </View>
+            <View style={styles.centerText}>
+              <Text style={styles.radioText}>Hard - 6s</Text>
+            </View>
+          </View>
+        </RadioButton.Group>
+      </View>
     </View>
   );
 };

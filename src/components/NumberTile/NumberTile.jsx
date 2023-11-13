@@ -100,6 +100,7 @@ const NumberTile = forwardRef(
         onPress={() => handlePress(numberText)}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        style={{ flex: 1 }}
       >
         <View
           style={[

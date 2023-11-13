@@ -5,11 +5,12 @@ import Arena from "../Arena/Arena";
 import ChallengeCard from "../ChallengeCard/ChallengeCard";
 import { Timer } from "../Timer/Timer";
 import { NumberEntry } from "../NumberEntry/NumberEntry";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Audio } from "expo-av";
 import { Welcome } from "../Welcome/Welcome";
 import musicTrack from "../../../assets/music/spring.mp3";
 import { responsiveSize } from "../helper-functions.js";
+import { StartButton } from "../StartButton/StartButton";
 const useStyles = () => {
   const { width, height } = useWindowDimensions();
 
@@ -19,21 +20,29 @@ const useStyles = () => {
       height: height,
       backgroundColor: "white",
       justifyContent: "flex-start",
-      gap: responsiveSize(10, width, height),
       alignItems: "flex-start",
-      flexDirection: "column",
+      flexDirection: "row",
     },
     leftContainer: {
-      width: "60%",
-      height: "88%",
+      width: "20%",
+      height: "100%",
       flexDirection: "row",
+    },
+    middleContainer: {
+      flex: 1,
+      height: "100%",
     },
     rightContainer: {
       flexDirection: "column",
       justifyContent: "flex-start",
-      width: "65%",
-      gap: responsiveSize(10, width, height),
-      marginLeft: responsiveSize(10, width, height),
+      height: "100%",
+      flex: 2,
+    },
+    arenaArea: {
+      height: "50%",
+    },
+    entryArea: {
+      flex: 1,
     },
   });
 };
@@ -100,18 +109,74 @@ const GamePage = () => {
     playSound();
     setShowWelcome(false);
   };
-
+  const handleStartPress = () => {
+    setGameState(1);
+  };
   return (
     <View style={styles.container}>
-      {showWelcome && <Welcome onPress={handleWelcomePress} />}
-      <NumbersSelector
-        setNumbers={setUsableNumbers}
-        gameState={gameState}
-        status={progress}
-        targetTile={targetTile}
-      />
+      {showWelcome && (
+        <Welcome
+          onPress={handleWelcomePress}
+          setGameState={setGameState}
+          setDuration={setDuration}
+        />
+      )}
       <View style={styles.leftContainer}>
-        <Arena
+        <NumbersSelector
+          setNumbers={setUsableNumbers}
+          gameState={gameState}
+          status={progress}
+          targetTile={targetTile}
+        />
+        {gameState === 3 && (
+          <Timer duration={duration} setTimeDuration={setTimeDuration} />
+        )}
+      </View>
+      <View style={styles.rightContainer}>
+        {gameState === 0 ? (
+          <StartButton
+            pressHandler={handleStartPress}
+            setDuration={setDuration}
+            isDisabled={!(usableNumbers?.length > 1)}
+          />
+        ) : (
+          <>
+            <View style={styles.arenaArea}>
+              <Arena
+                selectedNumbers={usableNumbers}
+                gameState={gameState}
+                setGameState={setGameState}
+                setSelectedNumbers={setSelectedNumbers}
+                isCorrect={isCorrect}
+                setChosenTiles={SetChosenTiles}
+                setTargetTile={setTargetTile}
+              />
+            </View>
+            <View style={styles.entryArea}>
+              <ChallengeCard
+                gameState={gameState}
+                setGameState={setGameState}
+                usableNumbers={usableNumbers}
+                selectedNumbers={selectedNumbers}
+                response={response}
+                setIsCorrect={SetIsCorrect}
+                setDuration={setDuration}
+              />
+              <NumberEntry
+                gameState={gameState}
+                setGameState={setGameState}
+                setResponse={setResponse}
+              />
+            </View>
+          </>
+        )}
+      </View>
+    </View>
+  );
+};
+
+/*
+       <Arena
           selectedNumbers={usableNumbers}
           gameState={gameState}
           setGameState={setGameState}
@@ -120,29 +185,7 @@ const GamePage = () => {
           setChosenTiles={SetChosenTiles}
           setTargetTile={setTargetTile}
         />
-        {gameState === 3 && (
-          <Timer duration={duration} setTimeDuration={setTimeDuration} />
-        )}
-        <View style={styles.rightContainer}>
-          <ChallengeCard
-            gameState={gameState}
-            setGameState={setGameState}
-            usableNumbers={usableNumbers}
-            selectedNumbers={selectedNumbers}
-            response={response}
-            setIsCorrect={SetIsCorrect}
-            setDuration={setDuration}
-          />
-          <NumberEntry
-            gameState={gameState}
-            setGameState={setGameState}
-            setResponse={setResponse}
-          />
-        </View>
-      </View>
-    </View>
-  );
-};
+ */
 
 /*
 

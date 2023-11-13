@@ -19,7 +19,7 @@ const useStyles = () => {
     tile: {
       alignItems: "center",
       justifyContent: "center",
-      height: responsiveSize(80, width, height),
+      height: "2vw",
       marginTop: responsiveSize(4, width, height),
       marginBottom: responsiveSize(2, width, height),
     },
