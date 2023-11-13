@@ -4,17 +4,17 @@ import { RadioButton } from "react-native-paper";
 import { Audio } from "expo-av";
 import clickAudio from "../../../assets/sound/click3.mp3";
 
-import { responsiveSize } from "../helper-functions.js";
 const useStyles = () => {
   const { width, height } = useWindowDimensions();
   return StyleSheet.create({
     text: {
       color: "rgb(0, 150, 136)",
-      fontSize: "6vw",
+      fontSize: "8vw",
       fontWeight: "bold",
     },
     centerText: {
       flex: 1,
+      width: "100%",
       justifyContent: "center",
       alignItems: "center",
     },
@@ -92,26 +92,35 @@ export const DifficultySelector = ({ onSelectDifficulty }) => {
         >
           <View style={styles.row}>
             <View style={styles.centerText}>
-              <RadioButton value={20} />
-            </View>
-            <View style={styles.centerText}>
-              <Text style={styles.radioText}>Easy - 20s</Text>
-            </View>
-          </View>
-          <View style={styles.row}>
-            <View style={styles.centerText}>
-              <RadioButton value={12} />
-            </View>
-            <View style={styles.centerText}>
-              <Text style={styles.radioText}>Med - 12s</Text>
+              <RadioButton.Item
+                value={20}
+                label="Easy - 20s"
+                style={{ width: "100%" }}
+                labelStyle={{ fontSize: "6vw" }}
+                position={"leading"}
+              />
             </View>
           </View>
           <View style={styles.row}>
             <View style={styles.centerText}>
-              <RadioButton value={6} />
+              <RadioButton.Item
+                value={12}
+                label="Med - 12s"
+                style={{ width: "100%" }}
+                labelStyle={{ fontSize: "6vw" }}
+                position={"leading"}
+              />
             </View>
+          </View>
+          <View style={styles.row}>
             <View style={styles.centerText}>
-              <Text style={styles.radioText}>Hard - 6s</Text>
+              <RadioButton.Item
+                value={6}
+                label="Hard - 6s"
+                style={{ width: "100%" }}
+                labelStyle={{ fontSize: "6vw" }}
+                position={"leading"}
+              />
             </View>
           </View>
         </RadioButton.Group>
