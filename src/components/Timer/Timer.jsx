@@ -13,19 +13,21 @@ const useStyles = () => {
   return StyleSheet.create({
     container: {
       backgroundColor: "white",
-      fontSize: responsiveSize(140, width, height),
+      fontSize: "10vw",
       fontWeight: "bold",
       fontFamily: "sans-serif",
       position: "absolute",
-      top: responsiveSize(70, width, height),
-      left: responsiveSize(70, width, height),
+      top: "70%",
+      right: "0",
       borderRadius: "50%",
       zIndex: 1,
     },
     animContainer: {
       position: "absolute",
-      top: responsiveSize(110, width, height),
-      left: responsiveSize(-280, width, height),
+      top: "50%",
+      left: "0",
+      width: "40vw",
+      height: "40vw",
       zIndex: 2,
     },
   });
@@ -114,8 +116,8 @@ export const Timer = ({ duration, setTimeDuration }) => {
           duration={duration}
           colors={colors}
           colorsTime={colorsTime}
-          size={400}
-          strokeWidth={40}
+          size={100}
+          strokeWidth={10}
           onComplete={() => {
             sound.stopAsync();
           }}

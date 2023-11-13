@@ -12,41 +12,46 @@ const useStyles = () => {
 
   return StyleSheet.create({
     mainContainer: {
-      height: responsiveSize(200, width, height),
+      height: "10vw",
       backgroundColor: "#C0C0C0",
-      justifyContent: "space-around",
       alignItems: "center",
       flexDirection: "row",
     },
-    innerContainer: {
-      height: responsiveSize(200, width, height),
-      width: "100%",
-      backgroundColor: "#C0C0C0",
-      justifyContent: "space-evenly",
-      alignItems: "center",
+    leftContainer: {
+      flex: 1,
+    },
+    rightContainer: {
+      flex: 1,
+    },
+    middleContainer: {
+      width: "50%",
       flexDirection: "row",
     },
     container: {
-      width: responsiveSize(140, width, height),
-      height: responsiveSize(140, width, height),
+      width: "8vw",
+      height: "8vw",
       backgroundColor: "#E8E8E8",
       justifyContent: "center",
       alignItems: "center",
       flexDirection: "column",
-      margin: responsiveSize(60, width, height),
-      borderRadius: responsiveSize(15, width, height),
+      margin: "1%",
+      borderRadius: 15,
     },
     mainText: {
-      fontSize: responsiveSize(40, width, height),
-      padding: responsiveSize(1, width, height),
+      fontSize: "8vw",
+      padding: "2%",
     },
     text: {
       color: "black",
-      fontSize: responsiveSize(100, width, height),
-      padding: responsiveSize(1, width, height),
+      fontSize: "6vw",
+      padding: "2%",
     },
     cardContainer: {
       flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    pressable: {
       justifyContent: "center",
       alignItems: "center",
     },
@@ -138,23 +143,27 @@ const ChallengeCard = ({
   ) : (
     <View style={styles.mainContainer}>
       {gameState === 0 ? null : (
-        <View style={styles.innerContainer}>
-          <NumberTile
-            ref={num1Ref}
-            numberText={num1Ref.current?.state?.numberText ?? ""}
-            customStyles={styles}
-            onHoverEffect={false}
-            hideText={selectedNumbers.length === 0}
-          />
-          <Text style={styles.mainText}>X</Text>
-          <NumberTile
-            ref={num2Ref}
-            numberText={num2Ref.current?.state?.numberText ?? ""}
-            customStyles={styles}
-            onHoverEffect={false}
-            hideText={selectedNumbers.length === 0}
-          />
-        </View>
+        <>
+          <View style={styles.leftContainer} />
+          <View style={styles.middleContainer}>
+            <NumberTile
+              ref={num1Ref}
+              numberText={num1Ref.current?.state?.numberText ?? ""}
+              customStyles={styles}
+              onHoverEffect={false}
+              hideText={selectedNumbers.length === 0}
+            />
+            <Text style={styles.mainText}>X</Text>
+            <NumberTile
+              ref={num2Ref}
+              numberText={num2Ref.current?.state?.numberText ?? ""}
+              customStyles={styles}
+              onHoverEffect={false}
+              hideText={selectedNumbers.length === 0}
+            />
+          </View>
+          <View style={styles.rightContainer} />
+        </>
       )}
     </View>
   );

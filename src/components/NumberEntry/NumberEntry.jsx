@@ -14,57 +14,53 @@ const useStyles = () => {
       backgroundColor: "#C0C0C0",
       justifyContent: "flex-start",
       alignItems: "center",
-
-      gap: responsiveSize(2, width, height),
       flexDirection: "column",
       flexWrap: "wrap",
     },
     mainText: {
-      fontSize: responsiveSize(40, width, height),
-      padding: responsiveSize(1, width, height),
+      fontSize: "10vw",
+      padding: "1%",
     },
     container: {
       backgroundColor: "#E8E8E8",
       justifyContent: "center",
       alignItems: "center",
       flexDirection: "column",
-      borderRadius: responsiveSize(15, width, height),
+      borderRadius: 15,
       height: "100%",
     },
     text: {
-      fontSize: responsiveSize(40, width, height),
-      padding: responsiveSize(1, width, height),
+      fontSize: "6vw",
+      padding: "1%",
     },
     rowContainer: {
       flexDirection: "row",
       flexWrap: "nowrap",
       width: "100%",
       flex: 2,
-      padding: responsiveSize(10, width, height),
-      height: responsiveSize(100, width, height),
+      padding: "1%",
+      height: "6vw",
       justifyContent: "center",
-      gap: responsiveSize(8, width, height),
+      gap: "2%",
     },
     numberDisplay: {
       backgroundColor: "#AFAFAF",
       flex: 1,
-      marginTop: responsiveSize(2, width, height),
       height: "100%",
-      borderRadius: responsiveSize(10, width, height),
+      borderRadius: 15,
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
     },
     disabled: {
       opacity: 0.25,
-      width: responsiveSize(110, width, height),
-      height: responsiveSize(140, width, height),
+      width: "10vw",
+      height: "12vw",
       backgroundColor: "#E8E8E8",
       justifyContent: "center",
       alignItems: "center",
       flexDirection: "column",
-      margin: responsiveSize(30, width, height),
-      borderRadius: responsiveSize(15, width, height),
+      borderRadius: 15,
     },
     outerContainer: {
       flex: 1,
@@ -76,14 +72,17 @@ const displayStyle = () => {
 
   return StyleSheet.create({
     container: {
-      width: responsiveSize(80, width, height),
-      height: responsiveSize(80, width, height),
+      height: "10vw",
       justifyContent: "center",
       alignItems: "center",
     },
     text: {
       color: "rgb(0,150,136)",
-      fontSize: responsiveSize(50, width, height),
+      fontSize: "8vw",
+    },
+    pressable: {
+      justifyContent: "center",
+      alignItems: "center",
     },
   });
 };
@@ -176,16 +175,18 @@ export const NumberEntry = ({ gameState, setGameState, setResponse }) => {
     <View style={styles.mainContainer}>
       <View style={styles.rowContainer}>
         <View style={styles.numberDisplay}>
-          {numberTileRefs.current.map((ref, index) => (
-            <NumberTile
-              key={index}
-              ref={ref}
-              customStyles={displayStyles}
-              numberText={displayedNumber[index].toString()}
-              onHoverEffect={false}
-              hideText={false}
-            />
-          ))}
+          <View style={{ width: "50%", flexDirection: "row" }}>
+            {numberTileRefs.current.map((ref, index) => (
+              <NumberTile
+                key={index}
+                ref={ref}
+                customStyles={displayStyles}
+                numberText={displayedNumber[index].toString()}
+                onHoverEffect={false}
+                hideText={false}
+              />
+            ))}
+          </View>
         </View>
       </View>
       <View style={styles.rowContainer}>

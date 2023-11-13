@@ -28,10 +28,6 @@ const useStyles = () => {
       height: "100%",
       flexDirection: "row",
     },
-    middleContainer: {
-      flex: 1,
-      height: "100%",
-    },
     rightContainer: {
       flexDirection: "column",
       justifyContent: "flex-start",
@@ -39,7 +35,7 @@ const useStyles = () => {
       flex: 2,
     },
     arenaArea: {
-      height: "50%",
+      height: "52%",
     },
     entryArea: {
       flex: 1,
@@ -128,9 +124,6 @@ const GamePage = () => {
           status={progress}
           targetTile={targetTile}
         />
-        {gameState === 3 && (
-          <Timer duration={duration} setTimeDuration={setTimeDuration} />
-        )}
       </View>
       <View style={styles.rightContainer}>
         {gameState === 0 ? (
@@ -150,6 +143,8 @@ const GamePage = () => {
                 isCorrect={isCorrect}
                 setChosenTiles={SetChosenTiles}
                 setTargetTile={setTargetTile}
+                duration={duration}
+                setTimeDuration={setTimeDuration}
               />
             </View>
             <View style={styles.entryArea}>

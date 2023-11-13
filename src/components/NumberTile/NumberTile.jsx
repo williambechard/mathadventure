@@ -20,27 +20,27 @@ const useStyles = () => {
       backgroundColor: "lightblue", // Change background color on hover
     },
     container: {
-      width: responsiveSize(60, width, height),
-      height: responsiveSize(60, width, height),
+      width: "4vw",
+      height: "4vw",
       backgroundColor: "#C0C0C0",
       justifyContent: "center",
       alignItems: "center",
       flexDirection: "column",
-      margin: responsiveSize(1, width, height),
+      margin: "1vw",
       borderRadius: responsiveSize(10, width, height),
     },
     containerSelected: {
-      backgroundColor: "blue", // Change background color on select
+      backgroundColor: "#FBF38A",
     },
     containerCorrect: {
-      backgroundColor: "green",
+      backgroundColor: "#BEE5B0",
     },
     containerIncorrect: {
-      backgroundColor: "red",
+      backgroundColor: "#FF9997",
     },
     text: {
-      fontSize: responsiveSize(40, width, height),
-      padding: responsiveSize(1, width, height),
+      fontSize: "2vw",
+      padding: "1vw",
     },
     disabled: {
       opacity: 0.25,
@@ -100,7 +100,7 @@ const NumberTile = forwardRef(
         onPress={() => handlePress(numberText)}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        style={{ flex: 1 }}
+        style={[customStyles?.pressable, { flex: 1 }]}
       >
         <View
           style={[

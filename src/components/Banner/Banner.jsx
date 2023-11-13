@@ -27,11 +27,11 @@ const useStyles = () => {
     },
     banner: {
       backgroundColor: "black",
-      padding: responsiveSize(20, width, height),
+      padding: "2%",
       width: "100%",
     },
     text: {
-      fontSize: responsiveSize(120, width, height),
+      fontSize: "12vw",
       color: "white",
       textAlign: "center",
     },
@@ -43,15 +43,15 @@ const useStyles = () => {
     },
     animContainer: {
       position: "absolute",
-      top: "20%",
-      left: responsiveSize(-800, width, height),
+      top: "50%",
+      left: "-100vw",
       zIndex: 1,
-      width: responsiveSize(2000, width, height),
+      width: "200vw",
     },
     animContainerStatus: {
       position: "absolute",
-      bottom: "10%",
-      right: "10%",
+      bottom: "0%",
+      right: "0%",
       zIndex: 1,
     },
   });
@@ -83,7 +83,12 @@ export const Banner = ({ correct, answer, visible, onClose, problem }) => {
               />
             </FadeIn>
           </View>
-          <View style={styles.animContainerStatus}>
+          <View
+            style={[
+              styles.animContainerStatus,
+              !correct ? { width: "40vw", height: "40vw" } : {},
+            ]}
+          >
             <FadeIn duration={100}>
               <LottieView
                 source={correct ? correctAnimation : incorrectAnimation}
@@ -95,15 +100,33 @@ export const Banner = ({ correct, answer, visible, onClose, problem }) => {
           <View style={styles.banner}>
             <Text style={styles.text}>
               {correct ? (
-                <>
-                  <Text style={styles.textCorrect}>Correct! </Text>
+                <View
+                  style={{
+                    flexDirection: "column",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={[styles.textCorrect, { width: "100%" }]}>
+                    Correct!{" "}
+                  </Text>
                   <Text>{`${problem[0]} X ${problem[1]} = ${answer}`}</Text>
-                </>
+                </View>
               ) : (
-                <>
-                  <Text style={styles.textIncorrect}>Incorrect. </Text>
+                <View
+                  style={{
+                    flexDirection: "column",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={[styles.textIncorrect, { width: "100%" }]}>
+                    Incorrect.
+                  </Text>
                   <Text>{`${problem[0]} X ${problem[1]} = ${answer}`}</Text>
-                </>
+                </View>
               )}
             </Text>
           </View>

@@ -1,7 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
-import { FlatList, StyleSheet, useWindowDimensions, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+  Text,
+} from "react-native";
 import NumberTile from "../NumberTile/NumberTile";
 import { responsiveSize } from "../helper-functions";
+import { Timer } from "../Timer/Timer";
 const useStyles = () => {
   const { width, height } = useWindowDimensions();
 
@@ -9,30 +16,24 @@ const useStyles = () => {
     container: {
       width: "100%",
       height: "100%",
-      paddingTop: 8,
       backgroundColor: "#E8E8E8",
-      padding: responsiveSize(10, width, height),
-    },
-    rowContainer: {
-      flexDirection: "row",
+      padding: "1%",
     },
     tile: {
       alignItems: "center",
       justifyContent: "center",
       height: "2vw",
-      marginTop: responsiveSize(4, width, height),
-      marginBottom: responsiveSize(2, width, height),
+      marginTop: "1.25vw",
+      marginBottom: "2vw",
+      padding: "1vw",
+    },
+    headerRow: {
+      width: "100%",
+      flexDirection: "row",
+      backgroundColor: "rgb(0, 150, 136)",
+      borderRadius: 15,
     },
   });
-};
-
-const shuffleArray = (array) => {
-  const shuffledArray = [...array];
-  for (let i = shuffledArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-  }
-  return shuffledArray;
 };
 
 const Arena = ({
@@ -43,39 +44,34 @@ const Arena = ({
   isCorrect = false,
   setChosenTiles,
   setTargetTile,
+  duration,
+  setTimeDuration,
 }) => {
   const [randomTiles, setRandomTiles] = useState(null);
   const [tileState, setTileState] = useState(Array(100).fill(-1)); // Initialize with all zeros
   const [tileValues, setTileValues] = useState(Array(100).fill(0));
   const [selectedTileIndex, setSelectedTileIndex] = useState(null); // Index of the selected tile
   const [keyTiles, setKeyTiles] = useState([]);
+  const [headerNumbers, setHeaderNumbers] = useState([]);
+  const [headerNumbersState, setHeaderNumbersState] = useState([]);
+  const [headerIndex, setHeaderIndex] = useState(-1);
   const styles = useStyles();
   const numberTileRefs = useRef([]); // Array to store NumberTile refs
-  const gridSize = 12;
-  const tilesPerRow = 10;
-
-  useEffect(() => {
-    const initialChosenTiles = [];
-    let count = 0;
-    if (selectedNumbers?.length > 0) {
-      while (count < 100) {
-        initialChosenTiles.push(...selectedNumbers);
-        count += selectedNumbers.length;
-      }
-      setKeyTiles(initialChosenTiles.slice(0, 100));
-    }
-  }, [selectedNumbers]);
+  const gridSize = 13;
+  const tilesPerRow = 13;
 
   useEffect(() => {
     switch (gameState) {
       case 0:
         setRandomTiles(null);
-        setTileState(Array(100).fill(-1)); // Reset tileState
-        setTileValues(Array(100).fill(0)); // Reset tileValues
+        setTileState(Array(gridSize * tilesPerRow).fill(-1)); // Reset tileState
+        setTileValues(Array(gridSize * tilesPerRow).fill(0)); // Reset tileValues
         numberTileRefs.current = []; // Reset refs array
         break;
       case 1:
-        shuffleNumberTiles();
+        setTimeout(() => {
+          setNumberTiles();
+        }, 500);
         break;
       case 2:
         setRandomTiles(pickRandomTiles(selectedNumbers));
@@ -107,12 +103,23 @@ const Arena = ({
     });
   };
 
-  const shuffleNumberTiles = () => {
-    let shuffledNumbers = shuffleArray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  const setNumberTiles = () => {
+    const grid = [];
+
+    for (let row = 0; row < gridSize; row++) {
+      const rowNumbers = [];
+      for (let col = 0; col < tilesPerRow; col++) {
+        rowNumbers.push((col + row * tilesPerRow) % tilesPerRow); // Numbers in each column from 0 to 12
+      }
+      grid.push(rowNumbers);
+    }
 
     numberTileRefs.current.forEach((tileRef, index) => {
-      // Set a new random numberText from the shuffledNumbers array
-      const newNumber = shuffledNumbers.pop();
+      const row = index % gridSize; // Calculate the row based on the index
+      const col = Math.floor(index / gridSize); // Calculate the column based on the index
+      // console.log("row ", row, " col ", col);
+      // Set a new numberText from the specific position in the rowNumbers array
+      const newNumber = grid[row][col];
       tileRef.current.updateNumber(newNumber);
 
       // Set the corresponding tile value
@@ -121,11 +128,8 @@ const Arena = ({
         newValues[index] = newNumber;
         return newValues;
       });
-
-      if (shuffledNumbers.length === 0) {
-        shuffledNumbers = shuffleArray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-      }
     });
+
     setGameState(2);
   };
 
@@ -134,15 +138,16 @@ const Arena = ({
     const newTileState = [...tileState]; // Create a copy of the tileState
     const selNumbers = [];
     const selIndex = [];
-
-    //get a random index from keyTiles and pop it out of the array
-    const randomKeyIndex = Math.floor(Math.random() * keyTiles.length);
-    const randomKey = keyTiles[randomKeyIndex];
-    keyTiles.splice(randomKeyIndex, 1);
-    setTargetTile(randomKey); // <- a number of the target
-    selNumbers.push(randomKey);
+    if (headerIndex !== -1)
+      setHeaderNumbersState((prevHeaderNumbersState) => {
+        const newHeaderNumbersState = [...prevHeaderNumbersState];
+        newHeaderNumbersState[headerIndex] = 0;
+        return newHeaderNumbersState;
+      });
     while (selectedTiles.length < 1) {
       const randomIndex = Math.floor(Math.random() * tileState.length);
+      const selColumn = randomIndex % tilesPerRow;
+      console.log("selColumn ", selColumn);
       // Check if the tile at randomIndex is already selected
       if (!selectedTiles.some((tile) => tile.index === randomIndex)) {
         selectedTiles.push({
@@ -151,6 +156,14 @@ const Arena = ({
         });
         newTileState[randomIndex] = 1; // Update tileState to 1
         selIndex.push(randomIndex);
+        selNumbers.push(headerNumbers[selColumn]);
+        setTargetTile(headerNumbers[selColumn]);
+        setHeaderNumbersState((prevHeaderNumbersState) => {
+          const newHeaderNumbersState = [...prevHeaderNumbersState];
+          newHeaderNumbersState[selColumn] = 1;
+          return newHeaderNumbersState;
+        });
+        setHeaderIndex(selColumn);
         selNumbers.push(tileValues[randomIndex]);
       }
     }
@@ -194,17 +207,54 @@ const Arena = ({
     flexBasis: `${100 / tilesPerRow}%`,
   };
 
+  // Use useEffect to update headerNumbers and headerNumbersState
+  useEffect(() => {
+    const repeatedNumbers = [];
+
+    // Repeat selectedNumbers to fill all 13 slots
+    while (repeatedNumbers.length < tilesPerRow) {
+      repeatedNumbers.push(...selectedNumbers);
+    }
+
+    // Update headerNumbers and headerNumbersState
+    setHeaderNumbers(repeatedNumbers);
+    setHeaderNumbersState(Array(repeatedNumbers.length).fill(0));
+  }, [selectedNumbers, tilesPerRow]);
+
+  const generateHeaderRow = () => {
+    const headerRow = [];
+    for (let i = 0; i < tilesPerRow; i++) {
+      headerRow.push(
+        <NumberTile
+          numberText={headerNumbers[i]}
+          onHoverEffect={false}
+          hideText={false}
+          state={headerNumbersState[i]}
+        />,
+      );
+    }
+    return headerRow;
+  };
+  console.log("hnumstate ", headerNumbersState);
   return (
     <View style={styles.container}>
+      <View style={styles.headerRow}>
+        {headerNumbers?.length > 0 ? generateHeaderRow() : null}
+      </View>
       <FlatList
         data={flatListData}
         keyExtractor={keyExtractor}
         numColumns={tilesPerRow}
         renderItem={renderNumberTile}
+        style={{ marginTop: "-2vw" }}
       />
+      {gameState === 3 && (
+        <Timer duration={duration} setTimeDuration={setTimeDuration} />
+      )}
     </View>
   );
 };
+
 const renderNumberTile = ({ item, index }) => {
   const ref = useRef();
 
@@ -212,15 +262,13 @@ const renderNumberTile = ({ item, index }) => {
   numberTileRefs.current[index] = ref;
 
   return (
-    <View style={[styles.tile, tileStyle]}>
-      <NumberTile
-        ref={ref}
-        numberText={item}
-        onHoverEffect={false}
-        hideText={false}
-        state={tileState[item]}
-      />
-    </View>
+    <NumberTile
+      ref={ref}
+      numberText={item}
+      onHoverEffect={false}
+      hideText={false}
+      state={tileState[item]}
+    />
   );
 };
 export default Arena;
