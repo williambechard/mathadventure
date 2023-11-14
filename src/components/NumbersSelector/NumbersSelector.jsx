@@ -8,6 +8,7 @@ import {
 import { useEffect, useState } from "react";
 import NumberToggle from "../NumberToggle/NumberToggle";
 import { responsiveSize } from "../helper-functions";
+import { Reset } from "../Reset/Reset";
 const useStyles = () => {
   const { width, height } = useWindowDimensions();
   return StyleSheet.create({
@@ -24,13 +25,28 @@ const useStyles = () => {
     },
   });
 };
-const NumbersSelector = ({ setNumbers, gameState, status, targetTile }) => {
+const NumbersSelector = ({
+  setNumbers,
+  gameState,
+  status,
+  targetTile,
+  setGameState,
+}) => {
   const [toggledNumbers, setToggledNumbers] = useState([]);
   const [allToggled, setAllToggled] = useState(false);
   const styles = useStyles();
   useEffect(() => {
     setNumbers(toggledNumbers);
   }, [toggledNumbers, setNumbers]);
+
+  useEffect(() => {
+    switch (gameState) {
+      case 0:
+        setToggledNumbers([]);
+        setAllToggled(false);
+        break;
+    }
+  }, [gameState]);
 
   const generateNumbers = () =>
     [...Array(13)].map((_, i) => {
@@ -61,13 +77,18 @@ const NumbersSelector = ({ setNumbers, gameState, status, targetTile }) => {
 
   return (
     <View style={styles.container}>
-      <NumberToggle
-        gameState={gameState}
-        numberText={"All"}
-        key={"All"}
-        isAllToggled={allToggled}
-        setNumberToggle={toggleAll}
-      />
+      {gameState === 0 ? (
+        <NumberToggle
+          gameState={gameState}
+          numberText={"All"}
+          key={"All"}
+          isAllToggled={allToggled}
+          setNumberToggle={toggleAll}
+        />
+      ) : (
+        <Reset setGameState={setGameState} />
+      )}
+
       {generateNumbers()}
     </View>
   );

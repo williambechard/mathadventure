@@ -77,7 +77,7 @@ const Arena = ({
         setTimeout(() => {
           setNumberTiles();
           prePick();
-        }, 500);
+        }, 100);
         break;
       case 2:
         setRandomTiles(pickRandomTiles(selectedNumbers));
@@ -196,19 +196,19 @@ const Arena = ({
         setHeaderIndex(selColumn);
         selNumbers.push(tileValues[randomIndex]);
       }
+      console.log("tiles left ", prePickedTiles.length);
+      setSelectedTileIndex(selIndex);
+
+      setSelectedNumbers(selNumbers);
+      setChosenTiles(selNumbers);
+      setTimeout(() => {
+        setGameState(3);
+      }, 10);
+      setTileState(newTileState); // Update the tileState
     } else {
       //game over
-      console.error("game over");
+      setGameState(6);
     }
-    console.log("tiles left ", prePickedTiles.length);
-    setSelectedTileIndex(selIndex);
-
-    setSelectedNumbers(selNumbers);
-    setChosenTiles(selNumbers);
-    setTimeout(() => {
-      setGameState(3);
-    }, 500);
-    setTileState(newTileState); // Update the tileState
 
     return selectedTiles;
   };

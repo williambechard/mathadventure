@@ -1,16 +1,17 @@
-import NumberToggle from "../NumberToggle/NumberToggle";
 import NumbersSelector from "../NumbersSelector/NumbersSelector";
 import { StyleSheet, useWindowDimensions, View } from "react-native";
 import Arena from "../Arena/Arena";
 import ChallengeCard from "../ChallengeCard/ChallengeCard";
-import { Timer } from "../Timer/Timer";
 import { NumberEntry } from "../NumberEntry/NumberEntry";
 import React, { useEffect, useState } from "react";
 import { Audio } from "expo-av";
 import { Welcome } from "../Welcome/Welcome";
-import musicTrack from "../../../assets/music/spring.mp3";
-import { responsiveSize } from "../helper-functions.js";
+import menuMusicTrack from "../../../assets/music/spring.mp3";
+import multiplicationMusicTrack from "../../../assets/music/multiplication.mp3";
+import additionMusicTrack from "../../../assets/music/upbeat.mp3";
 import { StartButton } from "../StartButton/StartButton";
+import { EndGame } from "../EndGame/EndGame";
+
 const useStyles = () => {
   const { width, height } = useWindowDimensions();
 
@@ -43,6 +44,26 @@ const useStyles = () => {
   });
 };
 
+export const calculationResult = (numbers, target) => {
+  let result;
+  switch (target) {
+    case "*":
+      result = numbers.reduce((acc, curr) => acc * curr);
+      break;
+    case "+":
+      result = numbers.reduce((acc, curr) => acc + curr);
+      break;
+    case "-":
+      result = numbers.reduce((acc, curr) => acc - curr);
+      break;
+    case "/":
+      result = numbers.reduce((acc, curr) => acc / curr);
+      break;
+  }
+
+  return result;
+};
+
 const GamePage = () => {
   const [usableNumbers, setUsableNumbers] = useState(null);
   const [gameState, setGameState] = useState(0);
@@ -55,22 +76,46 @@ const GamePage = () => {
   const [chosenTiles, SetChosenTiles] = useState([]);
   const [progress, setProgress] = useState({});
   const [targetTile, setTargetTile] = useState(null);
+  const [arithmaticFunctionIndex, setArithmaticFunctionIndex] = useState(0);
+  const [sound, setSound] = useState(new Audio.Sound());
+
+  const arithmaticFunctions = ["+", "*"]; // - and / take special considerations to not be - or have fractions
   const styles = useStyles();
-  async function playSound() {
-    const sound = new Audio.Sound();
+
+  async function playSound(track) {
     try {
-      await sound.loadAsync(musicTrack);
-      await sound.playAsync({ isLooping: true }); // Add isLooping: true
+      // Unload the previous sound before loading a new one
+      await sound.unloadAsync();
+      // Load and play the new sound
+      await sound.loadAsync(track);
+      await sound.setIsLoopingAsync(true);
+      await sound.playAsync();
     } catch (err) {
-      console.log("error ", err);
+      console.error("Error playing sound", err);
     }
   }
 
   useEffect(() => {
+    return () => {
+      // Clean up resources when the component unmounts
+      sound.unloadAsync();
+    };
+  }, [sound]);
+
+  useEffect(() => {
     switch (gameState) {
       case 0:
+        setProgress({});
+        SetChosenTiles([]);
+        setTargetTile(null);
+        playSound(menuMusicTrack);
         break;
       case 1:
+        playSound(
+          arithmaticFunctionIndex === 0
+            ? multiplicationMusicTrack
+            : additionMusicTrack,
+        );
         break;
       case 4:
         break;
@@ -78,7 +123,6 @@ const GamePage = () => {
         updateProgress(chosenTiles[0], isCorrect);
         break;
     }
-    console.log("gamestate ", gameState);
   }, [gameState]);
 
   const updateProgress = (key, isCorrect) => {
@@ -102,7 +146,7 @@ const GamePage = () => {
   };
 
   const handleWelcomePress = () => {
-    playSound();
+    playSound(menuMusicTrack);
     setShowWelcome(false);
   };
   const handleStartPress = () => {
@@ -117,12 +161,14 @@ const GamePage = () => {
           setDuration={setDuration}
         />
       )}
+      {gameState === 6 && <EndGame setGameState={setGameState} />}
       <View style={styles.leftContainer}>
         <NumbersSelector
           setNumbers={setUsableNumbers}
           gameState={gameState}
           status={progress}
           targetTile={targetTile}
+          setGameState={setGameState}
         />
       </View>
       <View style={styles.rightContainer}>
@@ -130,7 +176,8 @@ const GamePage = () => {
           <StartButton
             pressHandler={handleStartPress}
             setDuration={setDuration}
-            isDisabled={!(usableNumbers?.length > 1)}
+            isDisabled={!(usableNumbers?.length > 0)}
+            setCalcIndex={setArithmaticFunctionIndex}
           />
         ) : (
           <>
@@ -156,6 +203,7 @@ const GamePage = () => {
                 response={response}
                 setIsCorrect={SetIsCorrect}
                 setDuration={setDuration}
+                mathOperator={arithmaticFunctions[arithmaticFunctionIndex]}
               />
               <NumberEntry
                 gameState={gameState}
@@ -169,50 +217,4 @@ const GamePage = () => {
     </View>
   );
 };
-
-/*
-       <Arena
-          selectedNumbers={usableNumbers}
-          gameState={gameState}
-          setGameState={setGameState}
-          setSelectedNumbers={setSelectedNumbers}
-          isCorrect={isCorrect}
-          setChosenTiles={SetChosenTiles}
-          setTargetTile={setTargetTile}
-        />
- */
-
-/*
-
-<View style={styles.leftContainer}>
-        <Arena
-          selectedNumbers={usableNumbers}
-          gameState={gameState}
-          setGameState={setGameState}
-          setSelectedNumbers={setSelectedNumbers}
-          isCorrect={isCorrect}
-          setChosenTiles={SetChosenTiles}
-          setTargetTile={setTargetTile}
-        />
-        {gameState === 3 && (
-          <Timer duration={duration} setTimeDuration={setTimeDuration} />
-        )}
-        <View style={styles.rightContainer}>
-          <ChallengeCard
-            gameState={gameState}
-            setGameState={setGameState}
-            usableNumbers={usableNumbers}
-            selectedNumbers={selectedNumbers}
-            response={response}
-            setIsCorrect={SetIsCorrect}
-            setDuration={setDuration}
-          />
-          <NumberEntry
-            gameState={gameState}
-            setGameState={setGameState}
-            setResponse={setResponse}
-          />
-        </View>
-      </View>
- */
 export default GamePage;

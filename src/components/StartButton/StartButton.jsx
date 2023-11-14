@@ -10,6 +10,7 @@ import { Audio } from "expo-av";
 import DifficultySelector from "../DifficultySelector/DifficultySelector";
 import buttonSound from "../../../assets/sound/button.mp3";
 import { responsiveSize } from "../helper-functions.js";
+import { ArithmeticSelector } from "../ArithmeticSelector/ArithmaticSelector";
 const useStyles = () => {
   const { width, height } = useWindowDimensions();
 
@@ -42,6 +43,12 @@ const useStyles = () => {
     disabled: {
       opacity: 0.25,
     },
+    selectors: {
+      marginTop: "10vw",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+    },
   });
 };
 
@@ -49,6 +56,7 @@ export const StartButton = ({
   pressHandler,
   isDisabled = false,
   setDuration,
+  setCalcIndex,
 }) => {
   const [isHovered, setHovered] = useState(false);
   const [sound, setSound] = useState();
@@ -114,7 +122,10 @@ export const StartButton = ({
           <Text style={styles.text}>Start</Text>
         </View>
       </Pressable>
-      <DifficultySelector onSelectDifficulty={handleDifficultySelect} />
+      <View style={styles.selectors}>
+        <DifficultySelector onSelectDifficulty={handleDifficultySelect} />
+        <ArithmeticSelector setCalcIndex={setCalcIndex} />
+      </View>
     </View>
   );
 };

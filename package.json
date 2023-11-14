@@ -16,6 +16,7 @@
     "expo": "~49.0.15",
     "expo-av": "~13.4.1",
     "expo-cli": "^6.3.10",
+    "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
     "lottie-react-native": "^6.4.0",
     "prettier": "^3.0.3",
@@ -27,9 +28,9 @@
     "react-native-progress": "^5.0.1",
     "react-native-sound": "^0.11.2",
     "react-native-svg": "^13.14.0",
+    "react-native-vector-icons": "^10.0.2",
     "react-native-web": "~0.19.6",
-    "react-scripts": "^5.0.1",
-    "expo-splash-screen": "~0.20.5"
+    "react-scripts": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

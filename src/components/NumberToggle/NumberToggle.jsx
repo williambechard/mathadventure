@@ -87,11 +87,34 @@ const NumberToggle = ({
 }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [sound, setSound] = useState();
-  const styles = useStyles();
   const trackedStatus = isTracked
     ? numberStatus[numberText] || { correct: 0, incorrect: 0 }
     : { correct: 0, incorrect: 0 };
 
+  const [incorrectPercentage, setIncorrectPercentage] = useState(
+    (trackedStatus.incorrect /
+      (trackedStatus.correct + trackedStatus.incorrect)) *
+      100,
+  );
+
+  useEffect(() => {
+    switch (gameState) {
+      case 0:
+        setIncorrectPercentage(0);
+        setIsEnabled(false);
+        break;
+    }
+  }, [gameState]);
+
+  useEffect(() => {
+    setIncorrectPercentage(
+      (trackedStatus.incorrect /
+        (trackedStatus.correct + trackedStatus.incorrect)) *
+        100,
+    );
+  }, [numberStatus]);
+
+  const styles = useStyles();
   useEffect(() => {
     const loadSound = async () => {
       try {
@@ -132,11 +155,6 @@ const NumberToggle = ({
       setNumberToggle(!isEnabled);
     }
   };
-
-  const incorrectPercentage =
-    (trackedStatus.incorrect /
-      (trackedStatus.correct + trackedStatus.incorrect)) *
-    100;
 
   return (
     <View

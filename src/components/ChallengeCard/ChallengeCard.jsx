@@ -7,6 +7,7 @@ import { Audio } from "expo-av";
 import correctAudio from "../../../assets/sound/correct.mp3";
 import incorrectAudio from "../../../assets/sound/incorrect.mp3";
 import { responsiveSize } from "../helper-functions.js";
+import { calculationResult } from "../GamePage/GamePage";
 const useStyles = () => {
   const { width, height } = useWindowDimensions();
 
@@ -61,11 +62,10 @@ const useStyles = () => {
 const ChallengeCard = ({
   gameState,
   setGameState,
-  usableNumbers,
   selectedNumbers,
   response,
   setIsCorrect,
-  setDuration,
+  mathOperator,
 }) => {
   const [soundCorrect, setSoundCorrect] = useState();
   const [soundWrong, setSoundWrong] = useState();
@@ -107,7 +107,8 @@ const ChallengeCard = ({
 
   const playSound = async () => {
     const soundToPlay =
-      response === selectedNumbers[0] * selectedNumbers[1]
+      response ===
+      calculationResult([selectedNumbers[0], selectedNumbers[1]], mathOperator)
         ? soundCorrect
         : soundWrong;
     try {
@@ -120,8 +121,16 @@ const ChallengeCard = ({
 
   const [answer, setAnswer] = useState(0);
   useEffect(() => {
-    setAnswer(selectedNumbers[0] * selectedNumbers[1]);
-    setIsCorrect(response === selectedNumbers[0] * selectedNumbers[1]);
+    setAnswer(
+      calculationResult([selectedNumbers[0], selectedNumbers[1]], mathOperator),
+    );
+    setIsCorrect(
+      response ===
+        calculationResult(
+          [selectedNumbers[0], selectedNumbers[1]],
+          mathOperator,
+        ),
+    );
   }, [response]);
 
   const handleSubmitAnswer = () => {
@@ -135,8 +144,18 @@ const ChallengeCard = ({
 
   return gameState === 4 ? (
     <Banner
-      correct={response === selectedNumbers[0] * selectedNumbers[1]}
-      answer={answer}
+      correct={
+        response ===
+        calculationResult(
+          [selectedNumbers[0], selectedNumbers[1]],
+          mathOperator,
+        )
+      }
+      mathOperator={mathOperator}
+      answer={calculationResult(
+        [selectedNumbers[0], selectedNumbers[1]],
+        mathOperator,
+      )}
       problem={selectedNumbers}
       onClose={handleSubmitAnswer}
     />
@@ -153,7 +172,7 @@ const ChallengeCard = ({
               onHoverEffect={false}
               hideText={selectedNumbers.length === 0}
             />
-            <Text style={styles.mainText}>X</Text>
+            <Text style={styles.mainText}>{mathOperator}</Text>
             <NumberTile
               ref={num2Ref}
               numberText={num2Ref.current?.state?.numberText ?? ""}

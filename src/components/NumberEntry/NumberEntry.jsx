@@ -130,7 +130,9 @@ export const NumberEntry = ({ gameState, setGameState, setResponse }) => {
   const convertArrayToNumber = (arr) => {
     const filteredArray = arr.filter((item) => item !== "");
     const result =
-      filteredArray.length > 0 ? parseInt(filteredArray.join(""), 10) : 0;
+      filteredArray.length > 0
+        ? parseInt(filteredArray.join(""), 10)
+        : -99999999;
     return result;
   };
   const handlePress = (e) => {
@@ -153,15 +155,18 @@ export const NumberEntry = ({ gameState, setGameState, setResponse }) => {
             clearDisplay();
             break;
           case "OK":
-            setResponse(convertArrayToNumber(displayedNumber));
-            clearDisplay();
-            setGameState(4);
+            submitResponse();
             break;
         }
       }
     }
   };
 
+  const submitResponse = () => {
+    setResponse(convertArrayToNumber(displayedNumber));
+    clearDisplay();
+    setGameState(4);
+  };
   const clearDisplay = () => {
     setDisplayedNumber(["", "", ""]);
     setPointer(0);

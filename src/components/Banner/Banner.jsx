@@ -57,7 +57,14 @@ const useStyles = () => {
   });
 };
 
-export const Banner = ({ correct, answer, visible, onClose, problem }) => {
+export const Banner = ({
+  correct,
+  answer,
+  visible,
+  onClose,
+  problem,
+  mathOperator,
+}) => {
   const styles = useStyles();
   const handlePress = () => {
     if (visible) {
@@ -111,7 +118,7 @@ export const Banner = ({ correct, answer, visible, onClose, problem }) => {
                   <Text style={[styles.textCorrect, { width: "100%" }]}>
                     Correct!{" "}
                   </Text>
-                  <Text>{`${problem[0]} X ${problem[1]} = ${answer}`}</Text>
+                  <Text>{`${problem[0]} ${mathOperator} ${problem[1]} = ${answer}`}</Text>
                 </View>
               ) : (
                 <View
@@ -125,7 +132,7 @@ export const Banner = ({ correct, answer, visible, onClose, problem }) => {
                   <Text style={[styles.textIncorrect, { width: "100%" }]}>
                     Incorrect.
                   </Text>
-                  <Text>{`${problem[0]} X ${problem[1]} = ${answer}`}</Text>
+                  <Text>{`${problem[0]} ${mathOperator} ${problem[1]} = ${answer}`}</Text>
                 </View>
               )}
             </Text>
